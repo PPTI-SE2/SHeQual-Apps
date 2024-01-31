@@ -1,83 +1,136 @@
 import 'package:flutter/material.dart';
+import 'package:shequal/routes/app_routes.dart';
 import 'package:shequal/shared/theme.dart';
+import 'package:shequal/shared/widget/custom_button.dart';
 
-class OnBoardingScreen extends StatefulWidget {
-  const OnBoardingScreen({super.key});
+class OnBoardingScreen extends StatelessWidget {
+  const OnBoardingScreen({Key? key});
 
-  @override
-  State<OnBoardingScreen> createState() => _OnBoardingScreenState();
-}
-
-class _OnBoardingScreenState extends State<OnBoardingScreen> {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      body: Column(
-        children: [OnBoardingContent()],
-      ),
+      body: OnBoardingContent(),
     );
   }
 }
 
-class OnBoardingContent extends StatelessWidget {
-  const OnBoardingContent({super.key});
+class OnBoardingContent extends StatefulWidget {
+  const OnBoardingContent({Key? key});
+
+  @override
+  State<OnBoardingContent> createState() => _OnBoardingContentState();
+}
+
+class _OnBoardingContentState extends State<OnBoardingContent> {
+  late PageController _pageController;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController();
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    Widget indicator(int index) {
-      BoxDecoration conditionStyle(bool isActive) {
-        if(!isActive) {
-          return BoxDecoration(
-            color: (isActive) ? kPrimaryColor : kInactiveColor,
-            borderRadius: BorderRadius.circular(
-              (isActive) ? 10 : 0
-            ),
-            shape: BoxShape.circle,
-          );
-        }
-        return BoxDecoration(
-          color: (isActive) ? kPrimaryColor : kInactiveColor,
-          borderRadius: BorderRadius.circular(
-            (isActive) ? 10 : 0
-          ),
-        );
-      }
-      return Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+    List<List<dynamic>> contentTextList = [
+      [
+        "Berbagi Pengalaman\nDi Forum",
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In eget lacus venenatis, sodales augue luctus, faucibus ipsum. Duis vestibulum urna eget nunc porttitor luctus. Praesent eges tor"
+      ],
+      [
+        "Bermain dan Konsultasi\nDengan Ahlinya",
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In eget lacus venenatis, sodales augue luctus, faucibus ipsum. Duis vestibulum urna eget nunc porttitor luctus. Praesent eges tor"
+      ],
+      [
+        "Mulai Sekarang",
+        Column(
           children: [
-            Container(
-              width: (index == 0) ? 56 : 20,
-              height: 20,
-              decoration: conditionStyle(index == 0)
+            CustomButton(
+              onPressed: () {
+                Navigator.pushNamed(
+                    context, AppRoutes.signIn);
+              },
+              color: kPrimaryColor,
+              textColor: kWhiteColor,
+              text: "Masuk",
+              width: 191,
             ),
-            const SizedBox(width: 15,),
-            Container(
-              width: (index == 1) ? 56 : 20,
-              height: 20,
-              decoration: conditionStyle(index == 1)
-            ),
-            const SizedBox(width: 15,),
-            Container(
-              width: (index == 2) ? 56 : 20,
-              height: 20,
-              decoration: conditionStyle(index == 2)
+            CustomButton(
+              onPressed: () {
+                Navigator.pushNamed(context, AppRoutes.signUp);
+              },
+              color: kInactiveColor,
+              textColor: kPrimaryColor,
+              text: "Daftar",
+              width: 191,
             ),
           ],
-      );
-    }
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Image.asset(
-          "assets/onBoarding/img1.png",
+        )
+      ]
+    ];
+
+    Widget imageBoarding(int index) {
+      return Container(
+        margin: const EdgeInsets.only(top: 35),
+        child: Image.asset(
+          "assets/onBoarding/img${index + 1}.png",
           width: 358,
           height: 373,
         ),
-        const SizedBox(
-          height: 35,
+      );
+    }
+
+    Widget contentText(int index) {
+      return Container(
+        margin: const EdgeInsets.symmetric(horizontal: 35),
+        child: Column(
+          children: [
+            Text(
+              contentTextList[index][0],
+              style: blackTextStyle.copyWith(
+                fontSize: 24,
+                fontWeight: medium,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(
+              height: 25,
+            ),
+            (index == 2)
+                ? contentTextList[index][1]
+                : Text(
+                    contentTextList[index][1],
+                    style: greyTextStyle.copyWith(
+                      fontSize: 16,
+                    ),
+                    textAlign: TextAlign.center,
+                  )
+          ],
         ),
-        // indicator(0),
-      ],
+      );
+    }
+
+    return Expanded(
+      child: PageView.builder(
+        itemCount: contentTextList.length,
+        itemBuilder: (context, index) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            imageBoarding(index),
+            const SizedBox(
+              height: 35,
+            ),
+            contentText(index)
+          ],
+        );
+      }),
     );
   }
 }

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shequal/providers/page_providers.dart';
 import 'package:shequal/routes/app_routes.dart';
 
 void main() {
@@ -11,10 +13,17 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'SHeQual',
-      debugShowCheckedModeBanner: false,
-      routes: AppRoutes.routes,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<PageProviders>(
+          create: (context) => PageProviders(),
+        )
+      ],
+      child: MaterialApp(
+        title: 'SHeQual',
+        debugShowCheckedModeBanner: false,
+        routes: AppRoutes.routes,
+      ),
     );
   }
 }
