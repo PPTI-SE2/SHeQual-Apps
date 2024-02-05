@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shequal/routes/app_routes.dart';
 import 'package:shequal/shared/theme.dart';
 import 'package:shequal/shared/widget/card_home.dart';
 
@@ -35,20 +36,25 @@ class HomeScreen extends StatelessWidget {
                   )),
             ),
             Expanded(
-              child: Container(
-                width: double.infinity,
-                height: 42,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 11,
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(context, AppRoutes.search);
+                },
+                child: Container(
+                  width: double.infinity,
+                  height: 42,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 11,
+                  ),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(18),
+                    color: const Color(0xffF7F7F7),
+                  ),
+                  child: Text("Topik apa yang kamu cari ?",
+                      style: blackTextStyle.copyWith(
+                          fontSize: 13, color: const Color(0xff979799))),
                 ),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(18),
-                  color: const Color(0xffF7F7F7),
-                ),
-                child: Text("Topik apa yang kamu cari ?",
-                    style: blackTextStyle.copyWith(
-                        fontSize: 13, color: const Color(0xff979799))),
               ),
             ),
           ],

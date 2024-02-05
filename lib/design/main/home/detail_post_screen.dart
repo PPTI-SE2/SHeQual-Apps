@@ -10,7 +10,7 @@ class DetailPostScreen extends StatelessWidget {
       return Container(
         width: double.infinity,
         height: MediaQuery.of(context).size.width / 1.8,
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
         margin: const EdgeInsets.only(bottom: 26),
         decoration: BoxDecoration(
           color: kGreyColor,
@@ -21,8 +21,7 @@ class DetailPostScreen extends StatelessWidget {
             onTap: () {
               Navigator.pop(context);
             },
-            child: Image.asset(
-              "assets/home/icon_arrow_back.png",
+            child: const SizedBox(
               width: 30,
               height: 30,
             ),
@@ -115,7 +114,7 @@ class DetailPostScreen extends StatelessWidget {
                       width: 5,
                     ),
                     Text(
-                      "36",
+                    "20",
                       style: blackTextStyle.copyWith(
                         fontWeight: semiBold,
                       ),
@@ -136,7 +135,7 @@ class DetailPostScreen extends StatelessWidget {
                       width: 5,
                     ),
                     Text(
-                      "20",
+                      "30",
                       style: blackTextStyle.copyWith(
                         fontWeight: semiBold,
                       ),
@@ -220,23 +219,89 @@ class DetailPostScreen extends StatelessWidget {
     }
 
     Widget commentSection() {
-      return Container();
+      return Container(
+        margin: const EdgeInsets.only(top: 25),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Row(
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Container(
+                  width: 40,
+                  height: 40,
+                  margin: const EdgeInsets.only(right: 10),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      width: 2,
+                      color: const Color(0xffDBD7EC),
+                    ),
+                  ),
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Ksatria Cahaya",
+                      style: purpleTextStyle,
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Container(
+                      width: MediaQuery.of(context).size.width / 1.4,
+                      child: Text(
+                          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In eget lacus venenatis, sodales augue luctus",
+                          style: blackTextStyle.copyWith(
+                            fontWeight: medium,
+                          ),
+                          textAlign: TextAlign.left,
+                        ),
+                    ),
+                    
+                  ],
+                ),
+              ],
+            ),
+            Image.asset(
+              "assets/home/icon_love_line.png",
+              width: 25,
+              height: 25,
+              color: kInactiveColor,
+            )
+          ],
+        ),
+      );
     }
 
     return Scaffold(
       backgroundColor: kWhiteColor,
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              banner(),
+        child: CustomScrollView(
+          slivers:[
+            SliverAppBar(
+            expandedHeight: MediaQuery.of(context).size.width / 1.8,
+            floating: false,
+            pinned: true,
+            flexibleSpace: FlexibleSpaceBar(
+              background: banner()
+            ),
+          ),
+            SliverList(
+              delegate: SliverChildListDelegate([
               headerProfile(),
               bodyContent(),
               commentLikes(),
               uploadTime(),
-              commentBar()
-            ],
-          ),
+              commentBar(),
+              commentSection(),
+              commentSection(),
+              commentSection(),
+              commentSection(),
+            ]))
+          ]
         ),
       ),
     );

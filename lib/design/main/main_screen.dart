@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shequal/design/main/home/home_screen.dart';
+import 'package:shequal/design/main/profile/profile_screen.dart';
+import 'package:shequal/providers/page_providers.dart';
 import 'package:shequal/shared/theme.dart';
 import 'package:shequal/shared/widget/custom_button_navigation_item.dart';
 
@@ -47,26 +50,28 @@ class _MainScreenState extends State<MainScreen> {
                 index: 3,
                 imageUrl: 'assets/navbar/icon_person.png',
               ),
-              CustomButtonNavigationItem(
-                index: 4,
-                imageUrl: 'assets/navbar/icon_settings.png',
-              ),
+              // CustomButtonNavigationItem(
+              //   index: 4,
+              //   imageUrl: 'assets/navbar/icon_settings.png',
+              // ),
             ],
           ),
         ),
       );
     }
-    
+
     Widget buildContent(int currentIndex) {
       switch (currentIndex) {
         case 0:
           return const HomeScreen();
         case 1:
-          // return TransactionPage();
+        // return TransactionPage();
         case 2:
-          // return WalletPage();
+        // return WalletPage();
         case 3:
-          // return SettingPage();
+          return const ProfileScreen();
+        case 4:
+        // return SettingPage();
         default:
           return const HomeScreen();
       }
@@ -75,11 +80,15 @@ class _MainScreenState extends State<MainScreen> {
     return Scaffold(
       backgroundColor: kBackgroundColor,
       body: SafeArea(
-        child: Stack(
-          children: [
-            buildContent(0),
-            customNavigationBar(),
-          ],
+        child: Consumer<PageProviders>(
+          builder: (context, pageProviders, _) {
+            return Stack(
+              children: [
+                buildContent(pageProviders.getIndex()),
+                customNavigationBar(),
+              ],
+            );
+          },
         ),
       ),
     );
