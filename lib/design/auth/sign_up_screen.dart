@@ -1,20 +1,73 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shequal/providers/auth_providers.dart';
 import 'package:shequal/routes/app_routes.dart';
 import 'package:shequal/shared/widget/custom_button.dart';
 import 'package:shequal/shared/widget/custom_text_form_field.dart';
 import '../../shared/theme.dart';
 
-class SignUpPage extends StatelessWidget {
+class SignUpPage extends StatefulWidget {
   SignUpPage({Key? key}) : super(key: key);
 
+  @override
+  State<SignUpPage> createState() => _SignUpPageState();
+}
+
+class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController nameController = TextEditingController(text: '');
+
+  final TextEditingController ageController = TextEditingController(text: '');
+
   final TextEditingController emailController = TextEditingController(text: '');
+
   final TextEditingController passwordController =
       TextEditingController(text: '');
-  final TextEditingController namaPenggunaController = TextEditingController(text: '');
+
+  final TextEditingController passwordConfirmController =
+      TextEditingController(text: '');
+
+  final TextEditingController namaPenggunaController =
+      TextEditingController(text: '');
+
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
+    AuthProviders authProviders = Provider.of<AuthProviders>(context);
+
+    handleSignUp() async {
+      setState(() {
+        isLoading = true;
+      });
+
+      if (await authProviders.register(
+        username: namaPenggunaController.text,
+        name: nameController.text,
+        email: emailController.text,
+        age: int.parse(ageController.text),
+        password: passwordController.text,
+        confirmPassword: passwordConfirmController.text,
+      )) {
+        Navigator.pushNamedAndRemoveUntil(
+            context, AppRoutes.main, (route) => false);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            duration: Duration(seconds: 1),
+            backgroundColor: kRedColor,
+            content: Text(
+              'Gagal Register',
+              textAlign: TextAlign.center,
+            ),
+          ),
+        );
+      }
+
+      setState(() {
+        isLoading = false;
+      });
+    }
+
     Widget title() {
       return Container(
         margin: const EdgeInsets.only(top: 30),
@@ -37,6 +90,14 @@ class SignUpPage extends StatelessWidget {
         );
       }
 
+      Widget ageInput() {
+        return CustomTextFormField(
+          title: 'Umur',
+          hintText: 'Umur anda',
+          controller: ageController,
+        );
+      }
+
       Widget emailInput() {
         return CustomTextFormField(
           title: 'Email',
@@ -51,6 +112,15 @@ class SignUpPage extends StatelessWidget {
           hintText: 'Kata sandi anda',
           obsecureText: true,
           controller: passwordController,
+        );
+      }
+
+      Widget passwordConfirmInput() {
+        return CustomTextFormField(
+          title: 'Konfirmasi Kata sandi',
+          hintText: 'Konfirmasi Kata sandi anda',
+          obsecureText: true,
+          controller: passwordConfirmController,
         );
       }
 
@@ -70,8 +140,8 @@ class SignUpPage extends StatelessWidget {
           text: 'Daftar',
           margin: const EdgeInsets.only(top: 30),
           onPressed: () {
-            Navigator.pushNamedAndRemoveUntil(context, AppRoutes.main, (route) => false);
-          },
+            Navigator.pushNamed(context, AppRoutes.main);
+          }
         );
       }
 
@@ -91,10 +161,12 @@ class SignUpPage extends StatelessWidget {
         child: Column(
           children: [
             nameInput(),
+            ageInput(),
             emailInput(),
             passwordInput(),
+            passwordConfirmInput(),
             namaPenggunaInput(),
-            button(),
+            (isLoading) ? const CircularProgressIndicator() : button(),
           ],
         ),
       );
