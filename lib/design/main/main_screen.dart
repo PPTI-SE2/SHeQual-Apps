@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shequal/design/main/articles/articles_screen.dart';
 import 'package:shequal/design/main/home/home_screen.dart';
 import 'package:shequal/design/main/profile/profile_screen.dart';
 import 'package:shequal/providers/page_providers.dart';
@@ -65,7 +66,7 @@ class _MainScreenState extends State<MainScreen> {
         case 0:
           return const HomeScreen();
         case 1:
-        // return TransactionPage();
+          return ArticleScreen();
         case 2:
         // return WalletPage();
         case 3:

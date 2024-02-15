@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shequal/design/auth/sign_in_screen.dart';
 import 'package:shequal/design/auth/sign_up_screen.dart';
+import 'package:shequal/design/main/articles/articles_screen.dart';
 import 'package:shequal/design/main/home/detail_post_screen.dart';
 import 'package:shequal/design/main/main_screen.dart';
 import 'package:shequal/design/main/profile/edit_profile_screen.dart';
@@ -19,6 +20,7 @@ class AppRoutes {
   static const String post = '/main/home/post';
   static const String editProfile = '/main/profile/edit';
   static const String search = '/main/search';
+  static const String articles = '/main/articles';
   
   static Map<String, WidgetBuilder> routes = {
     root: (context) => const SplashScreen(),
@@ -28,6 +30,7 @@ class AppRoutes {
     signUp: (context) => SignUpPage(),
     post: (context) => const DetailPostScreen(),
     editProfile: (context) => EditProfileScreen(),
-    search: (context) => const SearchScreen()
+    search: (context) => const SearchScreen(),
+    articles: (context) => const ArticleScreen()
   };
 }
