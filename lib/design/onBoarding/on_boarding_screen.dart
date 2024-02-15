@@ -116,21 +116,24 @@ class _OnBoardingContentState extends State<OnBoardingContent> {
       );
     }
 
-    return Expanded(
-      child: PageView.builder(
-        itemCount: contentTextList.length,
-        itemBuilder: (context, index) {
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            imageBoarding(index),
-            const SizedBox(
-              height: 35,
-            ),
-            contentText(index)
-          ],
-        );
-      }),
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      body: Expanded(
+        child: PageView.builder(
+          itemCount: contentTextList.length,
+          itemBuilder: (context, index) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              imageBoarding(index),
+              const SizedBox(
+                height: 35,
+              ),
+              contentText(index)
+            ],
+          );
+        }),
+      ),
     );
   }
 }
