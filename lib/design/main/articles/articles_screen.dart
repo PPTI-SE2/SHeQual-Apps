@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shequal/shared/theme.dart';
 
@@ -56,12 +55,77 @@ class ArticleScreen extends StatelessWidget {
       );
     }
 
+    Widget belajar() {
+      return Container(
+        margin: const EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
+        width: double.infinity,
+        height: 300,
+        decoration: BoxDecoration(
+          color: kRedColor,
+          borderRadius: BorderRadius.circular(10),
+          boxShadow: [
+            BoxShadow(
+              offset: const Offset(0, 2),
+              blurRadius: 2,
+              spreadRadius: 0,
+              color: Colors.black.withOpacity(0.25)
+            )
+          ],
+          image: DecorationImage(
+            image: AssetImage("assets/profile/banner.png"),
+            fit: BoxFit.cover
+          ),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              width: 20,
+              height: 20,
+              decoration: BoxDecoration(
+                color: kBlackColor,  
+              ),
+            ),
+            Container(
+              width: 20,
+              height: 20,
+              decoration: BoxDecoration(
+                color: kBlackColor,  
+              ),
+            ),
+            Container(
+              width: 20,
+              height: 20,
+              decoration: BoxDecoration(
+                color: kBlackColor,  
+              ),
+            ),
+            Container(
+              width: 20,
+              height: 20,
+              decoration: BoxDecoration(
+                color: kBlackColor,  
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
     return Scaffold(
       backgroundColor: kBackgroundColor,
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-          child: Column(children: [NavBarAtas(), ContainerKotak()]),
+          child: Column(
+            children: [
+              NavBarAtas(),
+              ContainerKotak(),
+              belajar(),
+            ],
+          ),
         ),
       ),
     );
