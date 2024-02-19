@@ -5,10 +5,12 @@ import 'package:shequal/design/main/home/home_screen.dart';
 import 'package:shequal/design/main/profile/profile_screen.dart';
 import 'package:shequal/providers/page_providers.dart';
 import 'package:shequal/shared/theme.dart';
+import 'package:shequal/shared/user_preference_manager.dart';
 import 'package:shequal/shared/widget/custom_button_navigation_item.dart';
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({super.key});
+  final UserPreferencesManager userPreferencesManager;
+  const MainScreen({super.key, required this.userPreferencesManager});
 
   @override
   State<MainScreen> createState() => _MainScreenState();
@@ -70,7 +72,7 @@ class _MainScreenState extends State<MainScreen> {
         case 2:
         // return WalletPage();
         case 3:
-          return const ProfileScreen();
+          return ProfileScreen(userPreferencesManager: widget.userPreferencesManager);
         case 4:
         // return SettingPage();
         default:

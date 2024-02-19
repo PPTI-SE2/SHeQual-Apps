@@ -4,8 +4,9 @@ class UserModel {
   String? email; 
   String? imgProfile;
   int? poin;
-  DateTime? createdAt;
-  DateTime? updatedAt;
+  String? emailVerifiedAt;
+  String? createdAt;
+  String? updatedAt;
   String? token;
 
   UserModel({
@@ -20,14 +21,14 @@ class UserModel {
   });
 
   UserModel.fromJson(Map<String, dynamic> json) {
-    username = json[username];
-    age = json[age];
-    email = json[email];
-    imgProfile = json[imgProfile];
-    poin = json[poin];
-    createdAt = json[createdAt];
-    updatedAt = json[updatedAt];
-    token = json[token];
+    username = json['username'];
+    age = json['age'];
+    email = json['email'];
+    imgProfile = json['img_profile'];
+    poin = json['poin'];
+    createdAt = json["created_at"].toString();
+    updatedAt = json["updated_at"].toString();
+    token = json['token'];
   }
 
   Map<String, dynamic> toJson() {
@@ -37,8 +38,8 @@ class UserModel {
       'email': email,
       'imgProfile': imgProfile,
       'poin': poin,
-      'createdAt': createdAt,
-      'updatedAt': updatedAt,
+      'created_at': createdAt,
+      'updated_at': updatedAt,
       'token': token,
     };
   }

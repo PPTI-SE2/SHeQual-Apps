@@ -1,12 +1,59 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shequal/models/user_model.dart';
+import 'package:shequal/providers/auth_providers.dart';
+import 'package:shequal/providers/page_providers.dart';
 import 'package:shequal/routes/app_routes.dart';
 import 'package:shequal/shared/theme.dart';
+import 'package:shequal/shared/user_preference_manager.dart';
+import 'package:intl/intl.dart';
 
-class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
+class ProfileScreen extends StatefulWidget {
+  final UserPreferencesManager userPreferencesManager;
+  ProfileScreen({super.key, required this.userPreferencesManager});
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  late UserModel _userModel = UserModel(  // Initialize _userModel here
+    username: '',
+    age: null,
+    email: '',
+    imgProfile: '',
+    poin: null,
+    createdAt: null,
+    updatedAt: null,
+    token: '',
+  );
+
+  @override
+  void initState() {
+    _initUser();
+    super.initState();
+  }
+
+  Future<void> _initUser() async {
+    final userModel = widget.userPreferencesManager.getUser();
+    if (userModel != null) {
+      setState(() {
+        _userModel = userModel;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    String convertDate() {
+      String timestamp = _userModel.createdAt.toString();
+      DateTime dateTime = DateTime.parse(timestamp);
+      String formattedDate = DateFormat('dd MMM yyyy').format(dateTime);
+      return formattedDate; // Output: 16 Mei 2024
+    }
+    AuthProviders authProviders = Provider.of<AuthProviders>(context);
+
+
     Widget banner() {
       return Container(
         width: double.infinity,
@@ -25,15 +72,15 @@ class ProfileScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: const Icon(
-                    Icons.arrow_back,
-                    size: 30,
-                  ),
-                ),
+                // GestureDetector(
+                //   onTap: () {
+                //     Navigator.pop(context);
+                //   },
+                //   child: const Icon(
+                //     Icons.arrow_back,
+                //     size: 30,
+                //   ),
+                // ),
                 GestureDetector(
                   onTap: () {
                     Navigator.pushNamed(context, AppRoutes.editProfile);
@@ -54,7 +101,30 @@ class ProfileScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                )
+                ),
+                GestureDetector(
+                  onTap: () {
+                    authProviders.logout();
+                    Provider.of<PageProviders>(context, listen: false).setIndex(0);
+                    Navigator.pushNamedAndRemoveUntil(context, AppRoutes.root, (route) => false);
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 15,
+                      vertical: 6,
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(18),
+                      color: kRedColor,
+                    ),
+                    child: Text(
+                      "Logout",
+                      style: whiteTextStyle.copyWith(
+                        fontWeight: semiBold,
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
             const Spacer(),
@@ -76,7 +146,7 @@ class ProfileScreen extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    "dinonara_",
+                    _userModel.username.toString(),
                     style: blackTextStyle.copyWith(
                       fontSize: 18,
                       fontWeight: bold,
@@ -103,7 +173,7 @@ class ProfileScreen extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.only(top: 10, right: 20),
           child: Text(
-            "Bergabung sejak\n20 Oct 2023",
+            "Bergabung sejak\n${convertDate()}",
             style: redTextStyle.copyWith(fontSize: 10),
             textAlign: TextAlign.center,
           ),
@@ -204,7 +274,7 @@ class ProfileScreen extends StatelessWidget {
                       )),
                 ),
                 Text(
-                  "dinonara_",
+                  "${_userModel.username}",
                   style: purpleTextStyle.copyWith(
                     fontWeight: medium,
                   ),

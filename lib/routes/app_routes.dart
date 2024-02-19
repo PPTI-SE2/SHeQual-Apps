@@ -8,9 +8,16 @@ import 'package:shequal/design/main/profile/edit_profile_screen.dart';
 import 'package:shequal/design/main/search_screen.dart';
 import 'package:shequal/design/onBoarding/on_boarding_screen.dart';
 import 'package:shequal/design/splah_screen.dart';
+import 'package:shequal/shared/user_preference_manager.dart';
 
 
 class AppRoutes {
+  final UserPreferencesManager userPreferencesManager;
+
+  AppRoutes({
+    required this.userPreferencesManager,
+  });
+
   static const String root = '/';
   static const String main = '/main';
   static const String onBoard = '/onBoard';
@@ -22,14 +29,14 @@ class AppRoutes {
   static const String search = '/main/search';
   static const String articles = '/main/articles';
   
-  static Map<String, WidgetBuilder> routes = {
+  Map<String, WidgetBuilder> get routes => {
     root: (context) => const SplashScreen(),
-    main: (context) => const MainScreen(),
+    main: (context) => MainScreen(userPreferencesManager: userPreferencesManager,),
     onBoard: (context) => const OnBoardingScreen(),
     signIn: (context) => SignInPage(),
     signUp: (context) => SignUpPage(),
     post: (context) => const DetailPostScreen(),
-    editProfile: (context) => EditProfileScreen(),
+    editProfile: (context) => EditProfileScreen(userPreferencesManager: userPreferencesManager,),
     search: (context) => const SearchScreen(),
     articles: (context) => const ArticleScreen()
   };

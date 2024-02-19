@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shequal/providers/auth_providers.dart';
 import 'package:shequal/routes/app_routes.dart';
 import 'package:shequal/shared/theme.dart';
 import 'package:shequal/shared/widget/custom_button.dart';
@@ -28,6 +30,13 @@ class _OnBoardingContentState extends State<OnBoardingContent> {
   void initState() {
     super.initState();
     _pageController = PageController();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (Provider.of<AuthProviders>(context, listen: false).isLoggedIn()) {
+        print("user logged in");
+        Navigator.pushNamedAndRemoveUntil(
+            context, AppRoutes.main, (route) => false);
+      }
+    });
   }
 
   @override
@@ -53,8 +62,7 @@ class _OnBoardingContentState extends State<OnBoardingContent> {
           children: [
             CustomButton(
               onPressed: () {
-                Navigator.pushNamed(
-                    context, AppRoutes.signIn);
+                Navigator.pushNamed(context, AppRoutes.signIn);
               },
               color: kPrimaryColor,
               textColor: kWhiteColor,
@@ -120,19 +128,19 @@ class _OnBoardingContentState extends State<OnBoardingContent> {
       resizeToAvoidBottomInset: false,
       body: Expanded(
         child: PageView.builder(
-          itemCount: contentTextList.length,
-          itemBuilder: (context, index) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              imageBoarding(index),
-              const SizedBox(
-                height: 35,
-              ),
-              contentText(index)
-            ],
-          );
-        }),
+            itemCount: contentTextList.length,
+            itemBuilder: (context, index) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  imageBoarding(index),
+                  const SizedBox(
+                    height: 35,
+                  ),
+                  contentText(index)
+                ],
+              );
+            }),
       ),
     );
   }

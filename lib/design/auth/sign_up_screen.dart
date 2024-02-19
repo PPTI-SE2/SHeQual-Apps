@@ -139,9 +139,7 @@ class _SignUpPageState extends State<SignUpPage> {
           width: double.infinity,
           text: 'Daftar',
           margin: const EdgeInsets.only(top: 30),
-          onPressed: () {
-            Navigator.pushNamed(context, AppRoutes.main);
-          }
+          onPressed: handleSignUp,
         );
       }
 
