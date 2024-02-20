@@ -35,7 +35,7 @@ class AppRoutes {
     onBoard: (context) => const OnBoardingScreen(),
     signIn: (context) => SignInPage(),
     signUp: (context) => SignUpPage(),
-    post: (context) => const DetailPostScreen(),
+    post: (context) => DetailPostScreen(),
     editProfile: (context) => EditProfileScreen(userPreferencesManager: userPreferencesManager,),
     search: (context) => const SearchScreen(),
     articles: (context) => const ArticleScreen()

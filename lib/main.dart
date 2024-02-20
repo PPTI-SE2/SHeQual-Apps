@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:shequal/providers/article_providers.dart';
 import 'package:shequal/providers/auth_providers.dart';
 import 'package:shequal/providers/page_providers.dart';
+import 'package:shequal/providers/post_providers.dart';
 import 'package:shequal/routes/app_routes.dart';
 import 'package:shequal/shared/user_preference_manager.dart';
 
@@ -28,6 +29,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<ArticleProviders>(
           create: (context) => ArticleProviders(),
+        ),
+        ChangeNotifierProvider<PostProviders>(
+          create: (context) => PostProviders(),
         ),
       ],
       child: MaterialApp(

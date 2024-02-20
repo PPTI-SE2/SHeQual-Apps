@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shequal/models/post_model.dart';
+import 'package:shequal/providers/post_providers.dart';
 import 'package:shequal/routes/app_routes.dart';
 import 'package:shequal/shared/theme.dart';
 import 'package:shequal/shared/widget/card_home.dart';
+import 'package:intl/intl.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -62,6 +66,7 @@ class HomeScreen extends StatelessWidget {
       );
     }
 
+    List<PostModel> posts = Provider.of<PostProviders>(context, listen: false).post;
     return SingleChildScrollView(
       child: Container(
         margin: const EdgeInsets.symmetric(
@@ -71,11 +76,10 @@ class HomeScreen extends StatelessWidget {
         child: Column(
           children: [
             header(),
-            CardHome(),
-            CardHome(),
-            CardHome(),
-            const SizedBox(
-              height: 100,
+            Column(
+            children: posts.map((data) {
+                return CardHome(postModel: data,);
+              }).toList(),
             ),
           ],
         ),

@@ -1,12 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:shequal/routes/app_routes.dart';
+import 'package:provider/provider.dart';
+import 'package:shequal/design/main/home/detail_post_screen.dart';
+import 'package:shequal/models/post_model.dart';
+import 'package:shequal/providers/post_providers.dart';
 import 'package:shequal/shared/theme.dart';
+import 'package:intl/intl.dart';
 
 class CardHome extends StatelessWidget {
-  const CardHome({super.key});
+  final PostModel postModel;
+  const CardHome({super.key, required this.postModel});
 
   @override
   Widget build(BuildContext context) {
+    String formatTime(String timestamp) {
+      // Parse the timestamp into a DateTime object
+      DateTime dateTime = DateTime.parse(timestamp);
+      // Format the DateTime object to display only the time
+      String formattedTime = DateFormat.Hm().format(dateTime);
+      return formattedTime;
+    }
+
     Widget header() {
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -36,7 +49,7 @@ class CardHome extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    "14:30",
+                    "${formatTime(postModel.createdAt.toString())}",
                     style: greyTextStyle.copyWith(
                       fontSize: 12,
                       fontWeight: light,
@@ -60,7 +73,7 @@ class CardHome extends StatelessWidget {
         width: 250,
         margin: const EdgeInsets.only(top: 10),
         child: Text(
-          "Keluhan Rumah Tangga diriku",
+          postModel.title.toString(),
           style: blackTextStyle.copyWith(
             fontSize: 24,
             fontWeight: medium,
@@ -80,6 +93,10 @@ class CardHome extends StatelessWidget {
           decoration: BoxDecoration(
             color: kGreyColor,
             borderRadius: BorderRadius.circular(18),
+            image: DecorationImage(
+              image: NetworkImage(postModel.imgPost.toString()),
+              fit: BoxFit.cover,
+            ),
           ),
         ),
       );
@@ -136,7 +153,26 @@ class CardHome extends StatelessWidget {
             ),
             GestureDetector(
               onTap: () {
-                Navigator.pushNamed(context, AppRoutes.post);
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+    builder: (context) => FutureBuilder(
+      future: Provider.of<PostProviders>(context, listen: false)
+          .checkLike(postsId: postModel.id, usersId: postModel.usersId),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return CircularProgressIndicator(); // or any loading indicator
+        } else if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        } else {
+          return DetailPostScreen(
+            postModel: postModel,
+            isLike: snapshot.data as bool,
+          );
+        }
+      },
+    ),
+  ),
+                );
               },
               child: Image.asset(
                 "assets/home/icon_expand.png",
