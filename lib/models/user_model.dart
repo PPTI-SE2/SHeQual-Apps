@@ -1,14 +1,17 @@
 class UserModel {
+  String? id;
   String? username;
   int? age;
   String? email; 
   String? imgProfile;
   int? poin;
-  DateTime? createdAt;
-  DateTime? updatedAt;
+  String? emailVerifiedAt;
+  String? createdAt;
+  String? updatedAt;
   String? token;
 
   UserModel({
+    required this.id,
     required this.username,
     required this.age,
     required this.email,
@@ -20,25 +23,27 @@ class UserModel {
   });
 
   UserModel.fromJson(Map<String, dynamic> json) {
-    username = json[username];
-    age = json[age];
-    email = json[email];
-    imgProfile = json[imgProfile];
-    poin = json[poin];
-    createdAt = json[createdAt];
-    updatedAt = json[updatedAt];
-    token = json[token];
+    id = json["id"].toString();
+    username = json['username'];
+    age = json['age'];
+    email = json['email'];
+    imgProfile = json['img_profile'];
+    poin = json['poin'];
+    createdAt = json["created_at"].toString();
+    updatedAt = json["updated_at"].toString();
+    token = json['token'];
   }
 
   Map<String, dynamic> toJson() {
     return {
+      'id': id,
       'username': username,
       'age': age,
       'email': email,
-      'imgProfile': imgProfile,
+      'img_profile': imgProfile,
       'poin': poin,
-      'createdAt': createdAt,
-      'updatedAt': updatedAt,
+      'created_at': createdAt,
+      'updated_at': updatedAt,
       'token': token,
     };
   }

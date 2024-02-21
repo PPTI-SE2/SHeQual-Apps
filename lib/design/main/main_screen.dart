@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shequal/design/main/articles/articles_screen.dart';
+import 'package:shequal/design/main/articles/quiz_web_view.dart';
 import 'package:shequal/design/main/home/home_screen.dart';
 import 'package:shequal/design/main/profile/profile_screen.dart';
 import 'package:shequal/providers/page_providers.dart';
+import 'package:shequal/routes/app_routes.dart';
 import 'package:shequal/shared/theme.dart';
+import 'package:shequal/shared/user_preference_manager.dart';
 import 'package:shequal/shared/widget/custom_button_navigation_item.dart';
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({super.key});
+  final UserPreferencesManager userPreferencesManager;
+  const MainScreen({super.key, required this.userPreferencesManager});
 
   @override
   State<MainScreen> createState() => _MainScreenState();
@@ -17,47 +21,75 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
-    Widget customNavigationBar() {
-      return Align(
-        alignment: Alignment.bottomCenter,
-        child: Container(
-          width: double.infinity,
-          height: 60,
-          margin: EdgeInsets.only(
-            bottom: 30,
-            left: defaultMargin,
-            right: defaultMargin,
-          ),
-          decoration: BoxDecoration(
-            color: kWhiteColor,
-            borderRadius: BorderRadius.circular(18),
-          ),
-          child: const Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              CustomButtonNavigationItem(
-                index: 0,
-                imageUrl: 'assets/navbar/icon_home.png',
+    Widget customNavigationBar(int currentIndex) {
+      return Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            (currentIndex == 0) ? Align(
+              alignment: Alignment.bottomRight,
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(context, AppRoutes.addPost);
+                },
+                child: Container(
+                  width: 58,
+                  height: 58,
+                  margin: const EdgeInsets.symmetric(
+                    horizontal: 35,
+                    vertical: 10
+                  ),
+                  decoration: const BoxDecoration(
+                    color: Color(0xffE1AFEE),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Center(
+                    child: Text("+", style: whiteTextStyle.copyWith(
+                      fontSize: 40,
+                      fontWeight: semiBold,
+                    ),),
+                  ),
+                ),
               ),
-              CustomButtonNavigationItem(
-                index: 1,
-                imageUrl: 'assets/navbar/icon_booking.png',
+            ): const SizedBox(),
+            Container(
+              width: double.infinity,
+              height: 60,
+              margin: EdgeInsets.only(
+                bottom: 30,
+                left: defaultMargin,
+                right: defaultMargin,
               ),
-              CustomButtonNavigationItem(
-                index: 2,
-                imageUrl: 'assets/navbar/icon_card.png',
+              decoration: BoxDecoration(
+                color: kWhiteColor,
+                borderRadius: BorderRadius.circular(18),
               ),
-              CustomButtonNavigationItem(
-                index: 3,
-                imageUrl: 'assets/navbar/icon_person.png',
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  CustomButtonNavigationItem(
+                    index: 0,
+                    imageUrl: 'assets/navbar/icon_home.png',
+                  ),
+                  CustomButtonNavigationItem(
+                    index: 1,
+                    imageUrl: 'assets/navbar/icon_booking.png',
+                  ),
+                  CustomButtonNavigationItem(
+                    index: 2,
+                    imageUrl: 'assets/navbar/icon_card.png',
+                  ),
+                  CustomButtonNavigationItem(
+                    index: 3,
+                    imageUrl: 'assets/navbar/icon_person.png',
+                  ),
+                  // CustomButtonNavigationItem(
+                  //   index: 4,
+                  //   imageUrl: 'assets/navbar/icon_settings.png',
+                  // ),
+                ],
               ),
-              // CustomButtonNavigationItem(
-              //   index: 4,
-              //   imageUrl: 'assets/navbar/icon_settings.png',
-              // ),
-            ],
-          ),
-        ),
+            ),
+          ],
       );
     }
 
@@ -66,11 +98,11 @@ class _MainScreenState extends State<MainScreen> {
         case 0:
           return const HomeScreen();
         case 1:
-          return ArticleScreen();
+          return QuizWebView();
         case 2:
         // return WalletPage();
         case 3:
-          return const ProfileScreen();
+          return ProfileScreen(userPreferencesManager: widget.userPreferencesManager);
         case 4:
         // return SettingPage();
         default:
@@ -86,7 +118,7 @@ class _MainScreenState extends State<MainScreen> {
             return Stack(
               children: [
                 buildContent(pageProviders.getIndex()),
-                customNavigationBar(),
+                customNavigationBar(pageProviders.getIndex()),
               ],
             );
           },

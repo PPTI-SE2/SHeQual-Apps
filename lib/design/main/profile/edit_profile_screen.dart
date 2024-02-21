@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:shequal/models/user_model.dart';
 import 'package:shequal/shared/theme.dart';
+import 'package:shequal/shared/user_preference_manager.dart';
 import 'package:shequal/shared/widget/custom_button.dart';
 import 'package:shequal/shared/widget/custom_text_form_field.dart';
+import 'package:intl/intl.dart';
 
 class EditProfileScreen extends StatelessWidget {
-  EditProfileScreen({super.key});
+  final UserPreferencesManager userPreferencesManager;
+  EditProfileScreen({super.key, required this.userPreferencesManager});
 
   final TextEditingController nameController = TextEditingController(text: '');
   final TextEditingController emailController = TextEditingController(text: '');
@@ -15,6 +19,13 @@ class EditProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    UserModel? _userModel = userPreferencesManager.getUser();
+    String convertDate() {
+      String timestamp = _userModel!.createdAt.toString();
+      DateTime dateTime = DateTime.parse(timestamp);
+      String formattedDate = DateFormat('dd MMM yyyy').format(dateTime);
+      return formattedDate; // Output: 16 Mei 2024
+    }
     Widget banner() {
       return Container(
         width: double.infinity,
@@ -69,7 +80,7 @@ class EditProfileScreen extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    "dinonara_",
+                    "${_userModel?.username}",
                     style: blackTextStyle.copyWith(
                       fontSize: 18,
                       fontWeight: bold,
@@ -83,7 +94,7 @@ class EditProfileScreen extends StatelessWidget {
                         color: kBlackColor.withOpacity(0.5)),
                   ),
                   Text(
-                    "Bergabung sejak 20 Oct 2023",
+                    "Bergabung sejak ${convertDate()}",
                     style: redTextStyle.copyWith(fontSize: 10),
                     textAlign: TextAlign.center,
                   ),
@@ -99,7 +110,7 @@ class EditProfileScreen extends StatelessWidget {
       Widget namaPenggunaInput() {
         return CustomTextFormField(
           title: 'Nama Pengguna',
-          hintText: 'dinonara_',
+          hintText: "${_userModel?.username}",
           controller: namaPenggunaController,
         );
       }
@@ -107,7 +118,7 @@ class EditProfileScreen extends StatelessWidget {
       Widget emailInput() {
         return CustomTextFormField(
           title: 'Email',
-          hintText: 'ashdiey@gmail.com',
+          hintText: "${_userModel?.email}",
           controller: emailController,
         );
       }

@@ -1,11 +1,60 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shequal/models/comment_model.dart';
+import 'package:shequal/models/post_model.dart';
+import 'package:shequal/providers/post_providers.dart';
 import 'package:shequal/shared/theme.dart';
+import 'package:shequal/shared/user_preference_manager.dart';
 
-class DetailPostScreen extends StatelessWidget {
-  const DetailPostScreen({super.key});
+class DetailPostScreen extends StatefulWidget {
+  PostModel? postModel;
+  bool? isLike;
+  DetailPostScreen({super.key, this.postModel, this.isLike});
+
+  @override
+  State<DetailPostScreen> createState() => _DetailPostScreenState();
+}
+
+class _DetailPostScreenState extends State<DetailPostScreen> {
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+    String getTimeDifference(String timestamp) {
+      // Parse the timestamp into a DateTime object
+      DateTime dateTime = DateTime.parse(timestamp);
+
+      // Get the current time
+      DateTime now = DateTime.now();
+
+      // Calculate the difference between the two times
+      Duration difference = now.difference(dateTime);
+
+      // Get the absolute difference in minutes
+      int differenceInMinutes = difference.inMinutes.abs();
+
+      // Calculate the difference in hours
+      int differenceInHours = differenceInMinutes ~/ 60;
+
+      // Calculate the difference in days
+      int differenceInDays = differenceInHours ~/ 24;
+
+      // Format the difference based on the magnitude
+      if (differenceInDays > 0) {
+        return '$differenceInDays hari yang lalu';
+      } else if (differenceInHours > 0) {
+        return '$differenceInHours jam yang lalu';
+      } else {
+        return '$differenceInMinutes menit yang lalu';
+      }
+    }
+
+    String waktu = getTimeDifference(widget.postModel!.createdAt.toString());
+    TextEditingController commentController = TextEditingController(text: "");
+
     Widget banner() {
       return Container(
         width: double.infinity,
@@ -14,12 +63,20 @@ class DetailPostScreen extends StatelessWidget {
         margin: const EdgeInsets.only(bottom: 26),
         decoration: BoxDecoration(
           color: kGreyColor,
+          image: DecorationImage(
+            image: NetworkImage("${widget.postModel!.imgPost}"),
+            fit: BoxFit.cover,
+          ),
         ),
         child: Align(
           alignment: Alignment.topLeft,
           child: GestureDetector(
             onTap: () {
               Navigator.pop(context);
+
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                Provider.of<PostProviders>(context, listen: false).getPosts();
+              });
             },
             child: const SizedBox(
               width: 30,
@@ -56,10 +113,32 @@ class DetailPostScreen extends StatelessWidget {
               ),
             ),
             const Spacer(),
-            Image.asset(
-              "assets/home/icon_love_line.png",
-              width: 30,
-              height: 30,
+            GestureDetector(
+              onTap: () async {
+                bool isLiked =
+                    await Provider.of<PostProviders>(context, listen: false)
+                        .likePost(
+                            postsId: widget.postModel!.id,
+                            usersId: widget.postModel!.usersId);
+                if (isLiked) {
+                  bool updatedIsLiked =
+                      await Provider.of<PostProviders>(context, listen: false)
+                          .checkLike(
+                              postsId: widget.postModel!.id,
+                              usersId: widget.postModel!.usersId);
+                  setState(() {
+                    widget.isLike = updatedIsLiked;
+                  });
+                }
+              },
+              child: Image.asset(
+                (widget.isLike == true)
+                    ? "assets/home/icon_love.png"
+                    : "assets/home/icon_love_line.png",
+                width: 30,
+                height: 30,
+                color: (widget.isLike == true) ? Colors.pink : kInactiveColor,
+              ),
             ),
           ],
         ),
@@ -74,7 +153,7 @@ class DetailPostScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Keluh Kesah\nRumah Tangga",
+                "${widget.postModel!.title}",
                 style: blackTextStyle.copyWith(
                   fontSize: 32,
                   fontWeight: semiBold,
@@ -84,7 +163,7 @@ class DetailPostScreen extends StatelessWidget {
                 height: 15,
               ),
               Text(
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In eget lacus venenatis, sodales augue luctus, faucibus ipsum. Duis vestibulum urna eget nunc porttitor luctus. Praesent eges tor",
+                "${widget.postModel!.content}",
                 style: greyTextStyle.copyWith(
                   fontSize: 16,
                 ),
@@ -114,7 +193,7 @@ class DetailPostScreen extends StatelessWidget {
                       width: 5,
                     ),
                     Text(
-                    "20",
+                      widget.postModel!.likes.toString(),
                       style: blackTextStyle.copyWith(
                         fontWeight: semiBold,
                       ),
@@ -135,7 +214,7 @@ class DetailPostScreen extends StatelessWidget {
                       width: 5,
                     ),
                     Text(
-                      "30",
+                      widget.postModel!.comments!.length.toString(),
                       style: blackTextStyle.copyWith(
                         fontWeight: semiBold,
                       ),
@@ -159,14 +238,15 @@ class DetailPostScreen extends StatelessWidget {
               style: greyTextStyle,
               children: [
                 TextSpan(
-                  text: "4 ",
+                  text: "${waktu[0] + waktu[1]} ",
                   style: blackTextStyle.copyWith(
                     fontSize: 16,
                     fontWeight: semiBold,
                   ),
                 ),
                 TextSpan(
-                  text: "jam lalu",
+                  text:
+                      "${waktu.split(" ")[1] + " " + waktu.split(" ")[2] + " " + waktu.split(" ")[3]}",
                   style: greyTextStyle,
                 ),
               ],
@@ -187,6 +267,7 @@ class DetailPostScreen extends StatelessWidget {
             Expanded(
               child: TextFormField(
                 maxLines: null, // or set it to a specific number if needed
+                controller: commentController,
                 decoration: InputDecoration(
                   hintText: "Write a comment",
                   hintStyle: greyTextStyle.copyWith(
@@ -208,17 +289,35 @@ class DetailPostScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 4),
-            Image.asset(
-              "assets/home/icon_paper_plane.png",
-              width: 40,
-              height: 40,
+            GestureDetector(
+              onTap: () async {
+                CommentModel? commentResult = 
+                    await Provider.of<PostProviders>(context, listen: false).addComment(
+                      postId: widget.postModel!.id.toString(), 
+                      userId: UserPreferencesManager().getUser()!.id.toString(), 
+                      details: commentController.text
+                    );
+
+                if(commentResult != null) {
+                  setState(() {
+                    // TODO: Masih ada error dalam menambahkan comment, (Error type)
+                    widget.postModel!.comments!.add(commentResult);
+                    commentController.text = "";
+                  });
+                }
+              }, 
+              child: Image.asset(
+                "assets/home/icon_paper_plane.png",
+                width: 40,
+                height: 40,
+              ),
             ),
           ],
         ),
       );
     }
 
-    Widget commentSection() {
+    Widget commentSection(CommentModel commentModel) {
       return Container(
         margin: const EdgeInsets.only(top: 25),
         padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -228,6 +327,7 @@ class DetailPostScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
+                // TODO: Img Comment
                 Container(
                   width: 40,
                   height: 40,
@@ -244,23 +344,22 @@ class DetailPostScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Ksatria Cahaya",
+                      commentModel.username.toString(),
                       style: purpleTextStyle,
                     ),
                     const SizedBox(
                       height: 5,
                     ),
-                    Container(
+                    SizedBox(
                       width: MediaQuery.of(context).size.width / 1.4,
                       child: Text(
-                          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In eget lacus venenatis, sodales augue luctus",
-                          style: blackTextStyle.copyWith(
-                            fontWeight: medium,
-                          ),
-                          textAlign: TextAlign.left,
+                        commentModel.details.toString(),
+                        style: blackTextStyle.copyWith(
+                          fontWeight: medium,
                         ),
+                        textAlign: TextAlign.left,
+                      ),
                     ),
-                    
                   ],
                 ),
               ],
@@ -279,30 +378,27 @@ class DetailPostScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: kWhiteColor,
       body: SafeArea(
-        child: CustomScrollView(
-          slivers:[
-            SliverAppBar(
+        child: CustomScrollView(slivers: [
+          SliverAppBar(
             expandedHeight: MediaQuery.of(context).size.width / 1.8,
             floating: false,
             pinned: true,
-            flexibleSpace: FlexibleSpaceBar(
-              background: banner()
-            ),
+            flexibleSpace: FlexibleSpaceBar(background: banner()),
           ),
-            SliverList(
+          SliverList(
               delegate: SliverChildListDelegate([
-              headerProfile(),
-              bodyContent(),
-              commentLikes(),
-              uploadTime(),
-              commentBar(),
-              commentSection(),
-              commentSection(),
-              commentSection(),
-              commentSection(),
-            ]))
-          ]
-        ),
+            headerProfile(),
+            bodyContent(),
+            commentLikes(),
+            uploadTime(),
+            commentBar(),
+            Column(
+              children: widget.postModel!.comments!.map((comment) {
+                return commentSection(comment);
+              }).toList(),
+            ),
+          ]))
+        ]),
       ),
     );
   }

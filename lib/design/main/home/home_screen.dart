@@ -1,10 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shequal/models/post_model.dart';
+import 'package:shequal/providers/post_providers.dart';
 import 'package:shequal/routes/app_routes.dart';
 import 'package:shequal/shared/theme.dart';
 import 'package:shequal/shared/widget/card_home.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  late Future<void> _dataInitialization;
+
+  Future<void> initData() async {
+    await Provider.of<PostProviders>(context, listen: true).getPosts();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    _dataInitialization = initData();
+    super.didChangeDependencies();
+  }
+
+  @override
+  void didUpdateWidget(covariant HomeScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _dataInitialization = initData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,9 +82,13 @@ class HomeScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(18),
                     color: const Color(0xffF7F7F7),
                   ),
-                  child: Text("Topik apa yang kamu cari ?",
-                      style: blackTextStyle.copyWith(
-                          fontSize: 13, color: const Color(0xff979799))),
+                  child: Text(
+                    "Topik apa yang kamu cari ?",
+                    style: blackTextStyle.copyWith(
+                      fontSize: 13,
+                      color: const Color(0xff979799),
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -62,24 +97,40 @@ class HomeScreen extends StatelessWidget {
       );
     }
 
-    return SingleChildScrollView(
-      child: Container(
-        margin: const EdgeInsets.symmetric(
-          horizontal: 20,
-          vertical: 16,
-        ),
-        child: Column(
-          children: [
-            header(),
-            CardHome(),
-            CardHome(),
-            CardHome(),
-            const SizedBox(
-              height: 100,
-            ),
-          ],
-        ),
-      ),
-    );
+    return FutureBuilder<void>(
+        future: _dataInitialization,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Scaffold(
+              backgroundColor: kWhiteColor,
+              body: const Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          } else {
+            List<PostModel> posts =
+                Provider.of<PostProviders>(context, listen: false).post;
+            return SingleChildScrollView(
+              child: Container(
+                margin: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 16,
+                ),
+                child: Column(
+                  children: [
+                    header(),
+                    Column(
+                      children: posts.map((data) {
+                        return CardHome(
+                          postModel: data,
+                        );
+                      }).toList(),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }
+        });
   }
 }

@@ -1,19 +1,58 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shequal/providers/auth_providers.dart';
 import 'package:shequal/routes/app_routes.dart';
 import 'package:shequal/shared/widget/custom_button.dart';
 import 'package:shequal/shared/widget/custom_text_form_field.dart';
 import '../../shared/theme.dart';
 
-class SignInPage extends StatelessWidget {
+class SignInPage extends StatefulWidget {
+  SignInPage({Key? key}) : super(key: key);
+
+  @override
+  State<SignInPage> createState() => _SignInPageState();
+}
+
+class _SignInPageState extends State<SignInPage> {
   final TextEditingController emailController = TextEditingController(text: '');
+
   final TextEditingController passwordController =
       TextEditingController(text: '');
 
-  SignInPage({Key? key}) : super(key: key);
-
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
+    AuthProviders authProviders = Provider.of<AuthProviders>(context);
+    handleSignIn() async {
+      setState(() {
+        isLoading = true;
+      });
+
+      if (await authProviders.login(
+        email: emailController.text,
+        password: passwordController.text,
+      )) {
+        Navigator.pushNamedAndRemoveUntil(
+            context, AppRoutes.main, (route) => false);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            duration: Duration(seconds: 1),
+            backgroundColor: kRedColor,
+            content: Text(
+              'Gagal Login',
+              textAlign: TextAlign.center,
+            ),
+          ),
+        );
+      }
+
+      setState(() {
+        isLoading = false;
+      });
+    }
+
     Widget title() {
       return Container(
         margin: const EdgeInsets.only(top: 30),
@@ -47,14 +86,12 @@ class SignInPage extends StatelessWidget {
 
       Widget button() {
         return CustomButton(
-              color: kPrimaryColor,
-              textColor: kWhiteColor,
-              width: double.infinity,
-              text: 'Masuk',
-              margin: const EdgeInsets.only(top: 30),
-              onPressed: () {
-                
-              },    
+          color: kPrimaryColor,
+          textColor: kWhiteColor,
+          width: double.infinity,
+          text: 'Masuk',
+          margin: const EdgeInsets.only(top: 30),
+          onPressed: handleSignIn,
         );
       }
 
@@ -75,7 +112,7 @@ class SignInPage extends StatelessWidget {
           children: [
             emailInput(),
             passwordInput(),
-            button(),
+            (isLoading) ? const CircularProgressIndicator() : button(),
           ],
         ),
       );
