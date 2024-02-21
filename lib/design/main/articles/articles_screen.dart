@@ -28,7 +28,7 @@ class ArticleScreen extends StatelessWidget {
                   style: purpleTextStyle.copyWith(
                       fontWeight: medium,
                       fontSize: 18,
-                      color: Color(0xFF7079F1)),
+                      color: Color.fromARGB(255, 49, 50, 57)),
                 ),
                 Text(
                   'Ara Chinda',
@@ -55,6 +55,61 @@ class ArticleScreen extends StatelessWidget {
       );
     }
 
+    Widget gambarArtikel() {
+      return Container(
+        width: 358,
+        height: 212,
+        decoration: BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage("assets/artikel/headline.png"),
+                fit: BoxFit.cover),
+            boxShadow: [
+              BoxShadow(
+                offset: const Offset(0, 2),
+                blurRadius: 2,
+                spreadRadius: 0,
+                color: Colors.black.withOpacity(0.25),
+              )
+            ]),
+      );
+    }
+
+    Widget teksArtikel() {
+      return Container(
+        padding: const EdgeInsets.fromLTRB(10, 30, 10, 85),
+        alignment: Alignment.centerLeft,
+        child: Scrollbar(
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  """
+                    Catcalling adalah penggunaan kata-kata yang tidak senonoh, ekspresi secara verbal dan non verbal yang kejadiannya terjadi di tempat umum atau publik.
+                    Catcalling juga berarti melakukan hal-hal yang mengarah berbau seksual kepada orang yang lewat di jalanan atau berada di tempat umum dan membuat orang yang bersangkutan merasa tidak nyaman atau terancam.\n\nAda 2 jenis Catcalling, yaitu :
+                    
+                    \tCatcalling Verbal Bentuk pelecehan seksual yang dilakukan dengan memberikan siulan atau komentar mengenai penampilan korban
+                    \tCatcalling Non Verbal Bentuk pelecehan seksual yang dilakukan dengan penggunaan gestur fisik untuk memberikan penilaian terhadap penampilan korban.
+                    Dampak Catcalling kepada Korban Perilaku Catcalling dianggap pelaku sebagai candaan untuk menarik perhatian korban. Padahal, banyak yang tidak menyadari jika perilaku tersebut dapat menimbulkan trauma bagi para korban. Dampak pada korban catcalling adalah: 
+                    Berkurangnya rasa aman dan nyaman. Merasa pergerakannya di ruang publik terbatas 
+                    Malu dan tidak percaya diri
+                    Mengganggu kesehatan mental.
+                    """,
+                  style: blackTextStyle.copyWith(
+                    color: Colors.black,
+                    fontSize: 18,
+                    fontStyle: FontStyle.normal,
+                    fontFamily: 'Poppins',
+                  ),
+                  textAlign: TextAlign.justify,
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+
     Widget belajar() {
       return Container(
         margin: const EdgeInsets.all(10),
@@ -66,16 +121,14 @@ class ArticleScreen extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
           boxShadow: [
             BoxShadow(
-              offset: const Offset(0, 2),
-              blurRadius: 2,
-              spreadRadius: 0,
-              color: Colors.black.withOpacity(0.25)
-            )
+                offset: const Offset(0, 2),
+                blurRadius: 2,
+                spreadRadius: 0,
+                color: Colors.black.withOpacity(0.25))
           ],
           image: DecorationImage(
-            image: AssetImage("assets/profile/banner.png"),
-            fit: BoxFit.cover
-          ),
+              image: AssetImage("assets/profile/banner.png"),
+              fit: BoxFit.cover),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -85,28 +138,28 @@ class ArticleScreen extends StatelessWidget {
               width: 20,
               height: 20,
               decoration: BoxDecoration(
-                color: kBlackColor,  
+                color: kBlackColor,
               ),
             ),
             Container(
               width: 20,
               height: 20,
               decoration: BoxDecoration(
-                color: kBlackColor,  
+                color: kBlackColor,
               ),
             ),
             Container(
               width: 20,
               height: 20,
               decoration: BoxDecoration(
-                color: kBlackColor,  
+                color: kBlackColor,
               ),
             ),
             Container(
               width: 20,
               height: 20,
               decoration: BoxDecoration(
-                color: kBlackColor,  
+                color: kBlackColor,
               ),
             ),
           ],
@@ -123,7 +176,9 @@ class ArticleScreen extends StatelessWidget {
             children: [
               NavBarAtas(),
               ContainerKotak(),
-              belajar(),
+              // belajar(),
+              gambarArtikel(),
+              teksArtikel(),
             ],
           ),
         ),
