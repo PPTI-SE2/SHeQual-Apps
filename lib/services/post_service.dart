@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:shequal/models/comment_model.dart';
 import 'package:shequal/models/post_model.dart';
 
 class PostService {
@@ -88,5 +89,42 @@ class PostService {
     }
 
     return false;
+  }
+
+  Future<CommentModel?> addComment({
+    required String postId,
+    required String userId,
+    required String details,
+  }) async {
+    var url = Uri.parse("$baseUrl/comments");
+
+    var headers = {
+      'content-type': 'application/json',
+    };
+
+    var body = jsonEncode({
+      "post_id": postId,
+      "user_id": userId,
+      "details": details,
+    });
+
+    var response = await http.post(
+      url,
+      headers: headers,
+      body: body,
+    );
+
+    print(response.body);
+
+    if(response.statusCode == 200) {
+      var data = jsonDecode(response.body)['data'];
+      CommentModel comment = CommentModel.fromJson(data);
+      print("Menambah komentar berhasil");
+
+      return comment;
+    }
+
+    print("Gagal menambah komentar");
+    return null;
   }
 }

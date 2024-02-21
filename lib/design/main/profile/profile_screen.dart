@@ -18,6 +18,7 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   late UserModel _userModel = UserModel(  // Initialize _userModel here
+    id: '',
     username: '',
     age: null,
     email: '',

@@ -1,4 +1,5 @@
 class UserModel {
+  String? id;
   String? username;
   int? age;
   String? email; 
@@ -10,6 +11,7 @@ class UserModel {
   String? token;
 
   UserModel({
+    required this.id,
     required this.username,
     required this.age,
     required this.email,
@@ -21,6 +23,7 @@ class UserModel {
   });
 
   UserModel.fromJson(Map<String, dynamic> json) {
+    id = json["id"].toString();
     username = json['username'];
     age = json['age'];
     email = json['email'];
@@ -33,10 +36,11 @@ class UserModel {
 
   Map<String, dynamic> toJson() {
     return {
+      'id': id,
       'username': username,
       'age': age,
       'email': email,
-      'imgProfile': imgProfile,
+      'img_profile': imgProfile,
       'poin': poin,
       'created_at': createdAt,
       'updated_at': updatedAt,

@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shequal/providers/article_providers.dart';
-import 'package:shequal/providers/post_providers.dart';
 import 'package:shequal/routes/app_routes.dart';
 import 'package:shequal/shared/theme.dart';
 
@@ -25,7 +24,6 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void> initData() async {
     await Provider.of<ArticleProviders>(context, listen: false).getArticles();
-    await Provider.of<PostProviders>(context, listen: false).getPosts();
   }
 
   @override
@@ -42,7 +40,7 @@ class _SplashScreenState extends State<SplashScreen> {
           );
         } else {
           // Once data is loaded, navigate to the next page
-          WidgetsBinding.instance!.addPostFrameCallback((_) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
             Navigator.pushNamedAndRemoveUntil(
                 context, AppRoutes.onBoard, (route) => false);
           });

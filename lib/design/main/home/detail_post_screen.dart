@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shequal/models/comment_model.dart';
 import 'package:shequal/models/post_model.dart';
 import 'package:shequal/providers/post_providers.dart';
 import 'package:shequal/shared/theme.dart';
+import 'package:shequal/shared/user_preference_manager.dart';
 
 class DetailPostScreen extends StatefulWidget {
   PostModel? postModel;
@@ -51,6 +53,7 @@ class _DetailPostScreenState extends State<DetailPostScreen> {
     }
 
     String waktu = getTimeDifference(widget.postModel!.createdAt.toString());
+    TextEditingController commentController = TextEditingController(text: "");
 
     Widget banner() {
       return Container(
@@ -70,6 +73,10 @@ class _DetailPostScreenState extends State<DetailPostScreen> {
           child: GestureDetector(
             onTap: () {
               Navigator.pop(context);
+
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                Provider.of<PostProviders>(context, listen: false).getPosts();
+              });
             },
             child: const SizedBox(
               width: 30,
@@ -186,7 +193,7 @@ class _DetailPostScreenState extends State<DetailPostScreen> {
                       width: 5,
                     ),
                     Text(
-                      "20",
+                      widget.postModel!.likes.toString(),
                       style: blackTextStyle.copyWith(
                         fontWeight: semiBold,
                       ),
@@ -207,7 +214,7 @@ class _DetailPostScreenState extends State<DetailPostScreen> {
                       width: 5,
                     ),
                     Text(
-                      "30",
+                      widget.postModel!.comments!.length.toString(),
                       style: blackTextStyle.copyWith(
                         fontWeight: semiBold,
                       ),
@@ -260,6 +267,7 @@ class _DetailPostScreenState extends State<DetailPostScreen> {
             Expanded(
               child: TextFormField(
                 maxLines: null, // or set it to a specific number if needed
+                controller: commentController,
                 decoration: InputDecoration(
                   hintText: "Write a comment",
                   hintStyle: greyTextStyle.copyWith(
@@ -281,17 +289,35 @@ class _DetailPostScreenState extends State<DetailPostScreen> {
               ),
             ),
             const SizedBox(width: 4),
-            Image.asset(
-              "assets/home/icon_paper_plane.png",
-              width: 40,
-              height: 40,
+            GestureDetector(
+              onTap: () async {
+                CommentModel? commentResult = 
+                    await Provider.of<PostProviders>(context, listen: false).addComment(
+                      postId: widget.postModel!.id.toString(), 
+                      userId: UserPreferencesManager().getUser()!.id.toString(), 
+                      details: commentController.text
+                    );
+
+                if(commentResult != null) {
+                  setState(() {
+                    // TODO: Masih ada error dalam menambahkan comment, (Error type)
+                    widget.postModel!.comments!.add(commentResult);
+                    commentController.text = "";
+                  });
+                }
+              }, 
+              child: Image.asset(
+                "assets/home/icon_paper_plane.png",
+                width: 40,
+                height: 40,
+              ),
             ),
           ],
         ),
       );
     }
 
-    Widget commentSection() {
+    Widget commentSection(CommentModel commentModel) {
       return Container(
         margin: const EdgeInsets.only(top: 25),
         padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -301,6 +327,7 @@ class _DetailPostScreenState extends State<DetailPostScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
+                // TODO: Img Comment
                 Container(
                   width: 40,
                   height: 40,
@@ -317,16 +344,16 @@ class _DetailPostScreenState extends State<DetailPostScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Ksatria Cahaya",
+                      commentModel.username.toString(),
                       style: purpleTextStyle,
                     ),
                     const SizedBox(
                       height: 5,
                     ),
-                    Container(
+                    SizedBox(
                       width: MediaQuery.of(context).size.width / 1.4,
                       child: Text(
-                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In eget lacus venenatis, sodales augue luctus",
+                        commentModel.details.toString(),
                         style: blackTextStyle.copyWith(
                           fontWeight: medium,
                         ),
@@ -365,10 +392,11 @@ class _DetailPostScreenState extends State<DetailPostScreen> {
             commentLikes(),
             uploadTime(),
             commentBar(),
-            commentSection(),
-            commentSection(),
-            commentSection(),
-            commentSection(),
+            Column(
+              children: widget.postModel!.comments!.map((comment) {
+                return commentSection(comment);
+              }).toList(),
+            ),
           ]))
         ]),
       ),
