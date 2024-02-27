@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shequal/design/auth/sign_in_screen.dart';
 import 'package:shequal/design/auth/sign_up_screen.dart';
-import 'package:shequal/design/main/articles/articles_screen.dart';
+import 'package:shequal/design/main/articles/article_screen.dart';
+import 'package:shequal/design/main/articles/details_article_screen.dart';
 import 'package:shequal/design/main/home/add_post_screen.dart';
 import 'package:shequal/design/main/home/detail_post_screen.dart';
 import 'package:shequal/design/main/main_screen.dart';

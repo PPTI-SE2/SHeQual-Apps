@@ -56,6 +56,26 @@ class PostProviders with ChangeNotifier {
     }
   }
 
+  Future<bool> addPost({
+    required String userId,
+    required String image,
+    required String title,
+    required String content,
+  }) async {
+    try {
+      PostModel? model = await PostService().addPost(userId: userId, image: image, title: title, content: content);
+
+      if(model != null) {
+        return true;
+      }
+
+    } catch (e) {
+      print(e.toString());
+    }
+
+    return false;
+  }
+
   Future<CommentModel?> addComment({
     required String postId,
     required String userId,

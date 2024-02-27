@@ -91,6 +91,39 @@ class PostService {
     return false;
   }
 
+  Future<PostModel?> addPost({
+    required String userId,
+    required String image,
+    required String title,
+    required String content,
+  }) async {
+    var url = Uri.parse("$baseUrl/posts");
+
+    var headers = {
+      'content-type': 'application/json',
+    };
+
+    var body = jsonEncode({
+      'user_id': userId,
+      'image': image,
+      'title': title,
+      'content': content,
+    });
+
+    var response = await http.post(
+      url,
+      headers: headers,
+      body: body,
+    );
+
+    print(response.body);
+    if(response.statusCode == 200) {
+      return PostModel.fromJson(jsonDecode(response.body)["data"]);
+    }
+
+    return null;
+  }  
+
   Future<CommentModel?> addComment({
     required String postId,
     required String userId,

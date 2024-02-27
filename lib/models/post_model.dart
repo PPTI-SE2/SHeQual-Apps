@@ -37,7 +37,7 @@ class PostModel {
     imgPost = json["img_post"];
     createdAt = json["created_at"];
     updatedAt = json["updated_at"];
-    comments = json["comments"].map<CommentModel>((comment) => CommentModel.fromJson(comment)).toList();
+    comments = (json["comments"] != null) ? json["comments"].map<CommentModel>((comment) => CommentModel.fromJson(comment)).toList() : null;
     likes = json["likes"];
   }
 
@@ -51,7 +51,7 @@ class PostModel {
       'img_post': imgPost,
       'created_at': createdAt,
       'updated_at': updatedAt,
-      'comments': comments!.map((comment) => comment.toJson()).toList(),
+      'comments': (comments != null) ? comments!.map((comment) => comment.toJson()).toList() : null,
       'likes': likes,
     };
   }

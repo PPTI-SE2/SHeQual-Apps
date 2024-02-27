@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shequal/design/main/home/detail_post_screen.dart';
-import 'package:shequal/design/main/home/home_screen.dart';
 import 'package:shequal/models/post_model.dart';
 import 'package:shequal/providers/post_providers.dart';
 import 'package:shequal/shared/theme.dart';
@@ -50,7 +49,7 @@ class CardHome extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    "${formatTime(postModel.createdAt.toString())}",
+                    formatTime(postModel.createdAt.toString()),
                     style: greyTextStyle.copyWith(
                       fontSize: 12,
                       fontWeight: light,

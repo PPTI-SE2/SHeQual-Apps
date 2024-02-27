@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shequal/design/main/articles/articles_screen.dart';
+import 'package:shequal/design/main/articles/article_screen.dart';
+import 'package:shequal/design/main/articles/details_article_screen.dart';
 import 'package:shequal/design/main/articles/quiz_web_view.dart';
 import 'package:shequal/design/main/home/home_screen.dart';
 import 'package:shequal/design/main/profile/profile_screen.dart';
@@ -98,13 +99,11 @@ class _MainScreenState extends State<MainScreen> {
         case 0:
           return const HomeScreen();
         case 1:
-          return QuizWebView();
+          return const ArticleScreen();
         case 2:
         // return WalletPage();
         case 3:
           return ProfileScreen(userPreferencesManager: widget.userPreferencesManager);
-        case 4:
-        // return SettingPage();
         default:
           return const HomeScreen();
       }

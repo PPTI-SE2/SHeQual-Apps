@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
+import 'package:shequal/providers/post_providers.dart';
 import 'package:shequal/shared/theme.dart';
 import 'package:shequal/shared/widget/custom_button.dart';
 
@@ -25,11 +27,13 @@ class _AddPostScreenState extends State<AddPostScreen> {
       });
     }
   }
+
+  
+  TextEditingController judulController = TextEditingController(text: "");
+  TextEditingController contentController = TextEditingController(text: "");
   
   @override
   Widget build(BuildContext context) {
-    TextEditingController judulController = TextEditingController(text: "");
-    TextEditingController contentController = TextEditingController(text: "");
     Widget header() {
       return Container(
         margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
@@ -43,7 +47,12 @@ class _AddPostScreenState extends State<AddPostScreen> {
               child: const Icon(Icons.arrow_back_ios),
             ),
             CustomButton(
-              onPressed: () {},
+              onPressed: () async {
+                bool isSuccess = await Provider.of<PostProviders>(context, listen: false).addPost(userId: "1", image: "https://ujione.id/wp-content/uploads/2021/12/logo-ujione-hijau-1.svg", title: judulController.text, content: contentController.text);
+                if(isSuccess) {
+                  Navigator.pop(context);
+                }
+              },
               color: kPrimaryColor,
               text: "Unggah",
               textColor: kWhiteColor,

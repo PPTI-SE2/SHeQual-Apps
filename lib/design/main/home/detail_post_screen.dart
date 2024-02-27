@@ -246,7 +246,7 @@ class _DetailPostScreenState extends State<DetailPostScreen> {
                 ),
                 TextSpan(
                   text:
-                      "${waktu.split(" ")[1] + " " + waktu.split(" ")[2] + " " + waktu.split(" ")[3]}",
+                    waktu.split(" ")[1] + " " + waktu.split(" ")[2] + " " + waktu.split(" ")[3],
                   style: greyTextStyle,
                 ),
               ],
@@ -327,12 +327,15 @@ class _DetailPostScreenState extends State<DetailPostScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                // TODO: Img Comment
                 Container(
                   width: 40,
                   height: 40,
                   margin: const EdgeInsets.only(right: 10),
                   decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: NetworkImage(widget.postModel!.imgProfile.toString()),
+                      fit: BoxFit.cover,
+                    ),
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
                       width: 2,

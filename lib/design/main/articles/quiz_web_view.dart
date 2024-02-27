@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:shequal/shared/theme.dart';
+import 'package:shequal/shared/widget/custom_button.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class QuizWebView extends StatefulWidget {
@@ -35,10 +37,43 @@ class _QuizWebViewState extends State<QuizWebView> {
 
   @override
   Widget build(BuildContext context) {
+    Widget header() {
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        color: kWhiteColor,
+        child: Row(
+          children: [
+            GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Icon(Icons.arrow_back_ios, color: kBlackColor, size: 30,),
+            ),
+          ],
+        ),
+      );
+    }
+
+    Widget button() {
+      return Container(
+        height: 70,
+        margin: const EdgeInsets.only(top: 20),
+        width: double.infinity,
+        child: Center(
+          child: CustomButton(onPressed: readJS, color: kPrimaryColor, text: "Konfirmasi", textColor: kWhiteColor, width: double.infinity),
+        ),
+      );
+    }
+
     return Scaffold(
-      body: WebViewWidget(controller: controller,),
-      floatingActionButton: FloatingActionButton(
-        onPressed: readJS
+      body: SafeArea(
+        child: Column(
+          children: [
+            header(),
+            Expanded(child: WebViewWidget(controller: controller,),),
+            button(),
+          ],
+        ),
       ),
     );
   }
