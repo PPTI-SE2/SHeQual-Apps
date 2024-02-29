@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shequal/design/main/consultation/detail_consultant.dart';
 import 'package:shequal/shared/theme.dart';
 import 'package:shequal/shared/widget/custom_button.dart';
 
@@ -148,7 +149,9 @@ class _ConsultantListState extends State<ConsultantList> {
             ),
             const Spacer(),
             TextButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const DetailConsultant()));
+              },
               child: Container(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 15,
