@@ -84,7 +84,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
             ),
             Container(
               width: double.infinity,
-              height: 400,
+              height: 500,
               margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
               padding: const EdgeInsets.symmetric(vertical: 15),
               decoration: BoxDecoration(
@@ -109,7 +109,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                             ),
                             TableCalendar(
                               locale: "en_US",
-                              rowHeight: 43,
+                              rowHeight: 50,
                               headerStyle: const HeaderStyle(
                                 formatButtonVisible: false,
                                 titleCentered: true,

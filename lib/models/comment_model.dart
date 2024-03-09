@@ -20,8 +20,8 @@ class CommentModel {
   });
 
   CommentModel.fromJson(Map<String, dynamic> json) {
-    id = json["id"];
-    usersId = json["users_id"];
+    id = json["id"].toString();
+    usersId = json["users_id"].toString();
     username = json["username"];
     imgProfile = json["img_profile"];
     postsId = json["posts_id"];

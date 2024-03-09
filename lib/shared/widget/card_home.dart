@@ -5,10 +5,12 @@ import 'package:shequal/models/post_model.dart';
 import 'package:shequal/providers/post_providers.dart';
 import 'package:shequal/shared/theme.dart';
 import 'package:intl/intl.dart';
+import 'package:shequal/shared/user_preference_manager.dart';
 
 class CardHome extends StatelessWidget {
   final PostModel postModel;
-  const CardHome({super.key, required this.postModel});
+  final UserPreferencesManager userPreferencesManager;
+  const CardHome({super.key, required this.postModel, required this.userPreferencesManager});
 
   @override
   Widget build(BuildContext context) {
@@ -36,13 +38,17 @@ class CardHome extends StatelessWidget {
                     width: 2,
                     color: const Color(0xffDBD7EC),
                   ),
+                  image: DecorationImage(
+                    image: NetworkImage(postModel.imgProfile.toString()),
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Gajah Terbang",
+                    postModel.username.toString(),
                     style: purpleTextStyle.copyWith(
                       fontSize: 14,
                       fontWeight: medium,
@@ -94,7 +100,7 @@ class CardHome extends StatelessWidget {
             color: kGreyColor,
             borderRadius: BorderRadius.circular(18),
             image: DecorationImage(
-              image: NetworkImage(postModel.imgPost.toString()),
+              image: NetworkImage("http://192.168.1.11:8000/${postModel.imgPost}"),
               fit: BoxFit.cover,
             ),
           ),
@@ -170,6 +176,7 @@ class CardHome extends StatelessWidget {
                           return DetailPostScreen(
                             postModel: postModel,
                             isLike: snapshot.data as bool,
+                            userPreferencesManager: userPreferencesManager,
                           );
                         }
                       },

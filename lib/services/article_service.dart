@@ -4,7 +4,7 @@ import 'package:shequal/models/article_model.dart';
 import 'package:http/http.dart' as http;
 
 class ArticleService {
-  String baseUrl = "http://192.168.130.163:8000/api";
+  String baseUrl = "http://192.168.1.11:8000/api";
 
   Future<List<ArticleModel>> getArticle() async {
     var url = Uri.parse("$baseUrl/articles");

@@ -7,7 +7,8 @@ import 'package:shequal/shared/theme.dart';
 import 'package:shequal/shared/widget/custom_button.dart';
 
 class SuccessConsultation extends StatefulWidget {
-  const SuccessConsultation({super.key});
+  bool isRequest;
+  SuccessConsultation({super.key, this.isRequest = true});
 
   @override
   State<SuccessConsultation> createState() => _SuccessConsultationState();
@@ -24,7 +25,7 @@ class _SuccessConsultationState extends State<SuccessConsultation> {
           children: [
             LottieBuilder.asset("assets/lottie/succes.json", width: 200, height: 200),
             const SizedBox(height: 50,),
-            Text("Permintaan berhasil dikirimkan", style: blackTextStyle.copyWith(
+            Text(widget.isRequest ? "Permintaan berhasil dikirimkan" : "Pembayaran berhasil", style: blackTextStyle.copyWith(
               fontSize: 18, fontWeight: semiBold,
             ),),
             CustomButton(

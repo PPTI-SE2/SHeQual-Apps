@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:shequal/models/comment_model.dart';
 import 'package:shequal/models/post_model.dart';
@@ -58,7 +60,7 @@ class PostProviders with ChangeNotifier {
 
   Future<bool> addPost({
     required String userId,
-    required String image,
+    required File image,
     required String title,
     required String content,
   }) async {

@@ -10,7 +10,7 @@ import 'package:intl/intl.dart';
 
 class ProfileScreen extends StatefulWidget {
   final UserPreferencesManager userPreferencesManager;
-  ProfileScreen({super.key, required this.userPreferencesManager});
+  const ProfileScreen({super.key, required this.userPreferencesManager});
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();

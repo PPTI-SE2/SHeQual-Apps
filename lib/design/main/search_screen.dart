@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shequal/models/article_model.dart';
+import 'package:shequal/providers/article_providers.dart';
 import 'package:shequal/shared/theme.dart';
 
-class SearchScreen extends StatelessWidget {
+class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
 
+  @override
+  State<SearchScreen> createState() => _SearchScreenState();
+}
+
+class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     Widget header() {
@@ -56,15 +64,18 @@ class SearchScreen extends StatelessWidget {
     }
 
     Widget bodyContent() {
-      Widget trendingCard() {
+      Widget trendingCard(ArticleModel model) {
         return Container(
           width: MediaQuery.of(context).size.width / 1.3,
           height: 208,
           margin: const EdgeInsets.only(right: 10),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            color: kGreyColor,
-          ),
+              borderRadius: BorderRadius.circular(10),
+              color: kGreyColor,
+              image: DecorationImage(
+                image: NetworkImage(model.imgArticles.toString()),
+                fit: BoxFit.cover,
+              )),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -78,8 +89,9 @@ class SearchScreen extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(vertical: 4, horizontal: 5),
                   decoration: BoxDecoration(
-                      color: kWhiteColor,
-                      borderRadius: BorderRadius.circular(10)),
+                    color: kWhiteColor,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                   child: Row(
                     children: [
                       Image.asset(
@@ -117,7 +129,7 @@ class SearchScreen extends StatelessWidget {
                   ),
                 ),
                 child: Text(
-                  "Beginilah caranya untuk mengatasi stalking yang terjadi pada anda",
+                  model.title.toString(),
                   style: whiteTextStyle.copyWith(
                     fontSize: 18,
                     fontWeight: medium,
@@ -130,7 +142,7 @@ class SearchScreen extends StatelessWidget {
         );
       }
 
-      Widget articleCard() {
+      Widget articleCard(ArticleModel model) {
         Widget commentLikes() {
           return Expanded(
             child: Container(
@@ -195,7 +207,7 @@ class SearchScreen extends StatelessWidget {
         return Container(
           width: double.infinity,
           height: 273,
-          margin: const EdgeInsets.only(bottom: 30),
+          margin: const EdgeInsets.only(bottom: 30, right: 20),
           child: Stack(
             children: [
               Container(
@@ -204,6 +216,10 @@ class SearchScreen extends StatelessWidget {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(18),
                   color: kGreyColor,
+                  image: DecorationImage(
+                    image: NetworkImage(model.imgArticles.toString()),
+                    fit: BoxFit.cover,
+                  )
                 ),
               ),
               Align(
@@ -228,11 +244,13 @@ class SearchScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "Tahukkah kamu apa itu catcalling?",
+                        model.title.toString(),
                         style: blackTextStyle.copyWith(
                           fontSize: 20,
                           fontWeight: semiBold,
                         ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.center,
                       ),
                       Row(
@@ -269,11 +287,12 @@ class SearchScreen extends StatelessWidget {
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
-                  children: [
-                    trendingCard(),
-                    trendingCard(),
-                    trendingCard(),
-                  ],
+                  children:
+                      Provider.of<ArticleProviders>(context, listen: false)
+                          .articles
+                          .take(3)
+                          .map((data) => trendingCard(data))
+                          .toList(),
                 ),
               ),
             ),
@@ -287,13 +306,12 @@ class SearchScreen extends StatelessWidget {
             const SizedBox(
               height: 30,
             ),
-            Padding(
-              padding: const EdgeInsets.only(right: 20.0),
-              child: articleCard(),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(right: 20.0),
-              child: articleCard(),
+            Column(
+              children: Provider.of<ArticleProviders>(context, listen: false)
+                  .articles
+                  .take(5)
+                  .map((data) => articleCard(data))
+                  .toList(),
             ),
           ],
         ),

@@ -96,7 +96,7 @@ class _MainScreenState extends State<MainScreen> {
     Widget buildContent(int currentIndex) {
       switch (currentIndex) {
         case 0:
-          return const HomeScreen();
+          return HomeScreen(userPreferencesManager: widget.userPreferencesManager);
         case 1:
           return const ArticleScreen();
         case 2:
@@ -104,7 +104,7 @@ class _MainScreenState extends State<MainScreen> {
         case 3:
           return ProfileScreen(userPreferencesManager: widget.userPreferencesManager);
         default:
-          return const HomeScreen();
+          return HomeScreen(userPreferencesManager: widget.userPreferencesManager,);
       }
     }
 

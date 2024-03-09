@@ -1,10 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:shequal/models/comment_model.dart';
 import 'package:shequal/models/post_model.dart';
 
 class PostService {
-  String baseUrl = "http://192.168.130.163:8000/api";
+  String baseUrl = "http://192.168.1.11:8000/api";
 
   Future<List<PostModel>> getPost() async {
     var url = Uri.parse("$baseUrl/posts");
@@ -93,7 +94,7 @@ class PostService {
 
   Future<PostModel?> addPost({
     required String userId,
-    required String image,
+    required File image,
     required String title,
     required String content,
   }) async {
@@ -103,18 +104,22 @@ class PostService {
       'content-type': 'application/json',
     };
 
-    var body = jsonEncode({
-      'user_id': userId,
-      'image': image,
-      'title': title,
-      'content': content,
-    });
+    var request = http.MultipartRequest('POST', url)
+      ..headers.addAll(headers)
+      ..fields['user_id'] = userId
+      ..fields['title'] = title
+      ..fields['content'] = content
+      ..files.add(
+        http.MultipartFile(
+          'img_post',
+          File(image.path).readAsBytes().asStream(),
+          File(image.path).lengthSync(),
+          filename: image.path.split("/").last,
+        )
+      );
 
-    var response = await http.post(
-      url,
-      headers: headers,
-      body: body,
-    );
+    var streamedResponse = await request.send();
+    var response = await http.Response.fromStream(streamedResponse);
 
     print(response.body);
     if(response.statusCode == 200) {

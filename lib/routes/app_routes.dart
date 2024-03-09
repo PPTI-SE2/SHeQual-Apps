@@ -38,10 +38,10 @@ class AppRoutes {
     onBoard: (context) => const OnBoardingScreen(),
     signIn: (context) => SignInPage(),
     signUp: (context) => SignUpPage(),
-    post: (context) => DetailPostScreen(),
+    post: (context) => DetailPostScreen(userPreferencesManager: userPreferencesManager,),
     editProfile: (context) => EditProfileScreen(userPreferencesManager: userPreferencesManager,),
     search: (context) => const SearchScreen(),
     articles: (context) => const ArticleScreen(),
-    addPost: (context) => const AddPostScreen(),
+    addPost: (context) => AddPostScreen(userPreferencesManager: userPreferencesManager,),
   };
 }

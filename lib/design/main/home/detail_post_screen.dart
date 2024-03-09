@@ -7,9 +7,10 @@ import 'package:shequal/shared/theme.dart';
 import 'package:shequal/shared/user_preference_manager.dart';
 
 class DetailPostScreen extends StatefulWidget {
+  final UserPreferencesManager userPreferencesManager;
   PostModel? postModel;
   bool? isLike;
-  DetailPostScreen({super.key, this.postModel, this.isLike});
+  DetailPostScreen({super.key, this.postModel, this.isLike, required this.userPreferencesManager});
 
   @override
   State<DetailPostScreen> createState() => _DetailPostScreenState();
@@ -294,13 +295,12 @@ class _DetailPostScreenState extends State<DetailPostScreen> {
                 CommentModel? commentResult = 
                     await Provider.of<PostProviders>(context, listen: false).addComment(
                       postId: widget.postModel!.id.toString(), 
-                      userId: UserPreferencesManager().getUser()!.id.toString(), 
+                      userId: widget.userPreferencesManager.getUser()!.id.toString(), 
                       details: commentController.text
                     );
 
                 if(commentResult != null) {
                   setState(() {
-                    // TODO: Masih ada error dalam menambahkan comment, (Error type)
                     widget.postModel!.comments!.add(commentResult);
                     commentController.text = "";
                   });

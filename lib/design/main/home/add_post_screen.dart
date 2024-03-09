@@ -5,10 +5,12 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:shequal/providers/post_providers.dart';
 import 'package:shequal/shared/theme.dart';
+import 'package:shequal/shared/user_preference_manager.dart';
 import 'package:shequal/shared/widget/custom_button.dart';
 
 class AddPostScreen extends StatefulWidget {
-  const AddPostScreen({super.key});
+  final UserPreferencesManager userPreferencesManager;
+  const AddPostScreen({super.key, required this.userPreferencesManager});
 
   @override
   State<AddPostScreen> createState() => _AddPostScreenState();
@@ -21,17 +23,16 @@ class _AddPostScreenState extends State<AddPostScreen> {
     final picker = ImagePicker();
     final pickedImage = await picker.pickImage(source: ImageSource.gallery);
 
-    if(pickedImage != null) {
+    if (pickedImage != null) {
       setState(() {
         _image = File(pickedImage.path);
       });
     }
   }
 
-  
   TextEditingController judulController = TextEditingController(text: "");
   TextEditingController contentController = TextEditingController(text: "");
-  
+
   @override
   Widget build(BuildContext context) {
     Widget header() {
@@ -48,8 +49,18 @@ class _AddPostScreenState extends State<AddPostScreen> {
             ),
             CustomButton(
               onPressed: () async {
-                bool isSuccess = await Provider.of<PostProviders>(context, listen: false).addPost(userId: "1", image: "https://ujione.id/wp-content/uploads/2021/12/logo-ujione-hijau-1.svg", title: judulController.text, content: contentController.text);
-                if(isSuccess) {
+                bool isSuccess = await Provider.of<PostProviders>(context,
+                        listen: false)
+                    .addPost(
+                        userId: widget.userPreferencesManager
+                            .getUser()!
+                            .id
+                            .toString(),
+                        image:
+                            _image!,
+                        title: judulController.text,
+                        content: contentController.text);
+                if (isSuccess) {
                   Navigator.pop(context);
                 }
               },
@@ -144,46 +155,55 @@ class _AddPostScreenState extends State<AddPostScreen> {
                   borderRadius: BorderRadius.circular(15),
                   border: Border.all(color: kInactiveColor, width: 2),
                 ),
-                child: Icon(Icons.camera_alt_rounded, color: kInactiveColor, size: 50,),
+                child: Icon(
+                  Icons.camera_alt_rounded,
+                  color: kInactiveColor,
+                  size: 50,
+                ),
               ),
             ),
-            (_image != null) ? 
-            Stack(
-              alignment: Alignment.topRight,
-              children: [
-                Container(
-                    width: 82,
-                    height: 82,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      border: Border.all(color: kInactiveColor, width: 2),
-                      image: DecorationImage(
-                        image: FileImage(_image!),
-                        fit: BoxFit.cover, 
+            (_image != null)
+                ? Stack(
+                    alignment: Alignment.topRight,
+                    children: [
+                      Container(
+                        width: 82,
+                        height: 82,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          border: Border.all(color: kInactiveColor, width: 2),
+                          image: DecorationImage(
+                            image: FileImage(_image!),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                Transform.translate(
-                  offset: const Offset(10, -5),
-                  child: GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _image = null;
-                      });
-                    },
-                    child: Container(
-                      width: 20,
-                      height: 20,
-                      decoration: BoxDecoration(
-                        color: kInactiveColor,
-                        shape: BoxShape.circle,
+                      Transform.translate(
+                        offset: const Offset(10, -5),
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              _image = null;
+                            });
+                          },
+                          child: Container(
+                            width: 20,
+                            height: 20,
+                            decoration: BoxDecoration(
+                              color: kInactiveColor,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              Icons.close,
+                              color: kGreyColor,
+                              size: 15,
+                            ),
+                          ),
+                        ),
                       ),
-                      child: Icon(Icons.close, color: kGreyColor, size: 15,),
-                    ),
-                  ),
-                ),
-              ],
-            ) : const SizedBox(),
+                    ],
+                  )
+                : const SizedBox(),
           ],
         ),
       );

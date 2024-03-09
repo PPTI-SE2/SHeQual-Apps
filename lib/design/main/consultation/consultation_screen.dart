@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shequal/design/main/consultation/calendar_screen.dart';
+import 'package:shequal/design/main/consultation/detail_request.dart';
 import 'package:shequal/shared/theme.dart';
 import 'package:shequal/shared/widget/custom_button.dart';
 
@@ -170,6 +171,106 @@ class _ConsultationScreenState extends State<ConsultationScreen> {
       }
 
       Widget consultationSection() {
+        Widget empty() {
+          return Column(
+            children: [
+              Image.asset(
+                "assets/consultation/icon-empty.png",
+                width: double.infinity,
+                height: 150,
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Center(
+                child: Text(
+                  "Belom ada\njanji yang kamu buat",
+                  style: blackTextStyle.copyWith(
+                    fontSize: 16,
+                    fontWeight: medium,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Center(
+                child: CustomButton(
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return const CalendarScreen();
+                    }));
+                  },
+                  color: kPrimaryColor,
+                  text: "Ayo buat janji",
+                  textColor: kWhiteColor,
+                  width: 170,
+                ),
+              ),
+            ],
+          );
+        }
+
+        Widget cardConsultation() {
+          return Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadiusDirectional.circular(18),
+              color: kWhiteColor,
+            ),
+            child: Row(
+              children: [
+                Container(
+                  width: 50,
+                  height: 50,
+                  margin: const EdgeInsets.only(right: 20),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.yellow[700],
+                  ),
+                  child: Center(
+                    child: Icon(Icons.pending_actions, color: kWhiteColor),
+                  ),
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Dr. Kurani",
+                      style: blackTextStyle.copyWith(
+                        fontSize: 16,
+                        fontWeight: semiBold,
+                      ),
+                    ),
+                    Text(
+                      "Biopsychologis",
+                      style: blackTextStyle.copyWith(
+                        fontSize: 14,
+                        fontWeight: light,
+                      ),
+                    ),
+                  ],
+                ),
+                const Spacer(),
+                CustomButton(
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) {
+                      return const DetailRequest();
+                    }));
+                  }, 
+                  color: kPrimaryColor, 
+                  text: "Lihat", 
+                  textColor: kWhiteColor, 
+                  width: 80,
+                ),
+              ],
+            ),
+          );
+        }
+
         return Column(
           children: [
             Text(
@@ -182,40 +283,8 @@ class _ConsultationScreenState extends State<ConsultationScreen> {
             const SizedBox(
               height: 20,
             ),
-            Image.asset(
-              "assets/consultation/icon-empty.png",
-              width: double.infinity,
-              height: 150,
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Center(
-              child: Text(
-                "Belom ada\njanji yang kamu buat",
-                style: blackTextStyle.copyWith(
-                  fontSize: 16,
-                  fontWeight: medium,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Center(
-              child: CustomButton(
-                onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return const CalendarScreen();
-                  }));
-                },
-                color: kPrimaryColor,
-                text: "Ayo buat janji",
-                textColor: kWhiteColor,
-                width: 170,
-              ),
-            ),
+            // empty(),
+            cardConsultation()
           ],
         );
       }

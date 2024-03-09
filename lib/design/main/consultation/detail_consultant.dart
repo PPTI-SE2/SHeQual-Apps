@@ -182,7 +182,7 @@ class _DetailConsultantState extends State<DetailConsultant> {
                     ),
                     CustomButton(
                       onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => const SuccessConsultation()));
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => SuccessConsultation()));
                       },
                       color: kPrimaryColor,
                       text: "Kirim Permintaan",

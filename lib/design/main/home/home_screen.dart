@@ -4,10 +4,13 @@ import 'package:shequal/models/post_model.dart';
 import 'package:shequal/providers/post_providers.dart';
 import 'package:shequal/routes/app_routes.dart';
 import 'package:shequal/shared/theme.dart';
+import 'package:shequal/shared/user_preference_manager.dart';
 import 'package:shequal/shared/widget/card_home.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final UserPreferencesManager userPreferencesManager;
+
+  const HomeScreen({Key? key, required this.userPreferencesManager}) : super(key: key);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -17,24 +20,17 @@ class _HomeScreenState extends State<HomeScreen> {
   late Future<void> _dataInitialization;
 
   Future<void> initData() async {
-    await Provider.of<PostProviders>(context, listen: true).getPosts();
+    await Provider.of<PostProviders>(context, listen: false).getPosts();
   }
 
   @override
   void initState() {
     super.initState();
+    _dataInitialization = initData();
   }
 
-  @override
-  void didChangeDependencies() {
-    _dataInitialization = initData();
-    super.didChangeDependencies();
-  }
-
-  @override
-  void didUpdateWidget(covariant HomeScreen oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    _dataInitialization = initData();
+  Future<void> refreshPosts() async {
+    await Provider.of<PostProviders>(context, listen: false).getPosts();
   }
 
   @override
@@ -59,12 +55,13 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 50,
               margin: const EdgeInsets.only(right: 21),
               decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: kGreyColor,
-                  image: const DecorationImage(
-                    image: AssetImage("assets/home/profile.png"),
-                    fit: BoxFit.contain,
-                  )),
+                shape: BoxShape.circle,
+                color: kGreyColor,
+                image: const DecorationImage(
+                  image: AssetImage("assets/home/profile.png"),
+                  fit: BoxFit.contain,
+                ),
+              ),
             ),
             Expanded(
               child: GestureDetector(
@@ -98,19 +95,25 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     return FutureBuilder<void>(
-        future: _dataInitialization,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Scaffold(
-              backgroundColor: kWhiteColor,
-              body: const Center(
-                child: CircularProgressIndicator(),
-              ),
-            );
-          } else {
-            List<PostModel> posts =
-                Provider.of<PostProviders>(context, listen: false).post;
-            return SingleChildScrollView(
+      future: _dataInitialization,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Scaffold(
+            backgroundColor: kWhiteColor,
+            body: const Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        } else {
+          List<PostModel> posts =
+              Provider.of<PostProviders>(context, listen: false).post;
+          return RefreshIndicator(
+            onRefresh: () async {
+              setState(() {
+                 refreshPosts();
+              });
+            },
+            child: SingleChildScrollView(
               child: Container(
                 margin: const EdgeInsets.symmetric(
                   horizontal: 20,
@@ -123,14 +126,17 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: posts.map((data) {
                         return CardHome(
                           postModel: data,
+                          userPreferencesManager: widget.userPreferencesManager,
                         );
                       }).toList(),
                     ),
                   ],
                 ),
               ),
-            );
-          }
-        });
+            ),
+          );
+        }
+      },
+    );
   }
 }
