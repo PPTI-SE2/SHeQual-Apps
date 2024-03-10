@@ -100,7 +100,7 @@ class _MainScreenState extends State<MainScreen> {
         case 1:
           return const ArticleScreen();
         case 2:
-          return const ConsultationScreen();
+          return ConsultationScreen(userPreferencesManager: widget.userPreferencesManager,);
         case 3:
           return ProfileScreen(userPreferencesManager: widget.userPreferencesManager);
         default:

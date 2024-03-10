@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shequal/providers/appoiment_providers.dart';
 import 'package:shequal/providers/article_providers.dart';
 import 'package:shequal/providers/auth_providers.dart';
 import 'package:shequal/providers/page_providers.dart';
@@ -32,6 +33,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<PostProviders>(
           create: (context) => PostProviders(),
+        ),
+        ChangeNotifierProvider<AppoimentProviders>(
+          create: (context) => AppoimentProviders(),
         ),
       ],
       child: MaterialApp(

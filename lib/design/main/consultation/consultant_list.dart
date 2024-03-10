@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:shequal/design/main/consultation/detail_consultant.dart';
 import 'package:shequal/shared/theme.dart';
-import 'package:shequal/shared/widget/custom_button.dart';
+import 'package:shequal/shared/user_preference_manager.dart';
 
 class ConsultantList extends StatefulWidget {
-  const ConsultantList({super.key});
+  final UserPreferencesManager userPreferencesManager;
+  final String date;
+  final String day;
+  final String time;
+  const ConsultantList({super.key, required this.userPreferencesManager, required this.date, required this.day, required this.time});
 
   @override
   State<ConsultantList> createState() => _ConsultantListState();
@@ -150,7 +154,12 @@ class _ConsultantListState extends State<ConsultantList> {
             const Spacer(),
             TextButton(
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const DetailConsultant()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => DetailConsultant(
+                  userPreferencesManager: widget.userPreferencesManager,
+                  date: widget.date,
+                  day: widget.day,
+                  time: widget.time,
+                ),),);
               },
               child: Container(
                 padding: const EdgeInsets.symmetric(

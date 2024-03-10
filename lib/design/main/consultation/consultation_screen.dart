@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:shequal/design/main/consultation/calendar_screen.dart';
 import 'package:shequal/design/main/consultation/detail_request.dart';
 import 'package:shequal/shared/theme.dart';
+import 'package:shequal/shared/user_preference_manager.dart';
 import 'package:shequal/shared/widget/custom_button.dart';
 
 class ConsultationScreen extends StatefulWidget {
-  const ConsultationScreen({super.key});
+  final UserPreferencesManager userPreferencesManager;
+  const ConsultationScreen({super.key, required this.userPreferencesManager});
 
   @override
   State<ConsultationScreen> createState() => _ConsultationScreenState();
@@ -200,7 +202,9 @@ class _ConsultationScreenState extends State<ConsultationScreen> {
                   onPressed: () {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
-                      return const CalendarScreen();
+                      return CalendarScreen(
+                        userPreferencesManager: widget.userPreferencesManager,
+                      );
                     }));
                   },
                   color: kPrimaryColor,
@@ -283,8 +287,8 @@ class _ConsultationScreenState extends State<ConsultationScreen> {
             const SizedBox(
               height: 20,
             ),
-            // empty(),
-            cardConsultation()
+            empty(),
+            // cardConsultation()
           ],
         );
       }

@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:shequal/design/main/consultation/consultant_list.dart';
 import 'package:shequal/shared/theme.dart';
+import 'package:shequal/shared/user_preference_manager.dart';
 import 'package:shequal/shared/widget/custom_button.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class CalendarScreen extends StatefulWidget {
-  const CalendarScreen({Key? key}) : super(key: key);
+  final UserPreferencesManager userPreferencesManager;
+  const CalendarScreen({Key? key, required this.userPreferencesManager}) : super(key: key);
 
   @override
   _CalendarScreenState createState() => _CalendarScreenState();
@@ -53,7 +55,12 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
   void _handleFinishButton() {
     Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return const ConsultantList();
+      return ConsultantList(
+        userPreferencesManager: widget.userPreferencesManager,
+        date: selectedDate.toString(),
+        day: selectedDate.day.toString(),
+        time: selectedTime,
+      );
     }));
   }
 

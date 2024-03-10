@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shequal/design/main/consultation/success_consultation.dart';
+import 'package:shequal/providers/appoiment_providers.dart';
 import 'package:shequal/shared/theme.dart';
+import 'package:shequal/shared/user_preference_manager.dart';
 import 'package:shequal/shared/widget/custom_button.dart';
 
 class DetailConsultant extends StatefulWidget {
-  const DetailConsultant({super.key});
+  final UserPreferencesManager userPreferencesManager;
+  final String day;
+  final String date;
+  final String time;
+  const DetailConsultant({super.key, required this.userPreferencesManager, required this.day, required this.date, required this.time});
 
   @override
   State<DetailConsultant> createState() => _DetailConsultantState();
@@ -181,8 +188,24 @@ class _DetailConsultantState extends State<DetailConsultant> {
                       ),
                     ),
                     CustomButton(
-                      onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => SuccessConsultation()));
+                      onPressed: () async {
+                        bool isSucess = await Provider.of<AppoimentProviders>(context, listen: false)
+                            .makeAppoiment(
+                                userId: widget.userPreferencesManager.getUser()!.id.toString(),
+                                consultantId: "2",
+                                date: widget.date,
+                                day: widget.day,
+                                time: widget.time,
+                            );
+                        if(!isSucess) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text("Gagal membuat janji konsultasi"),
+                            ),
+                          );
+                        } else {
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => SuccessConsultation()));
+                        }
                       },
                       color: kPrimaryColor,
                       text: "Kirim Permintaan",
