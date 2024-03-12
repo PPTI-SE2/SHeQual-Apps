@@ -8,10 +8,9 @@ import 'package:shequal/shared/widget/custom_button.dart';
 
 class DetailConsultant extends StatefulWidget {
   final UserPreferencesManager userPreferencesManager;
-  final String day;
   final String date;
   final String time;
-  const DetailConsultant({super.key, required this.userPreferencesManager, required this.day, required this.date, required this.time});
+  const DetailConsultant({super.key, required this.userPreferencesManager, required this.date, required this.time});
 
   @override
   State<DetailConsultant> createState() => _DetailConsultantState();
@@ -192,14 +191,14 @@ class _DetailConsultantState extends State<DetailConsultant> {
                         bool isSucess = await Provider.of<AppoimentProviders>(context, listen: false)
                             .makeAppoiment(
                                 userId: widget.userPreferencesManager.getUser()!.id.toString(),
-                                consultantId: "2",
+                                consultantId: "5",
                                 date: widget.date,
-                                day: widget.day,
                                 time: widget.time,
                             );
                         if(!isSucess) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
+                           SnackBar(
+                              backgroundColor: kRedColor,
                               content: Text("Gagal membuat janji konsultasi"),
                             ),
                           );

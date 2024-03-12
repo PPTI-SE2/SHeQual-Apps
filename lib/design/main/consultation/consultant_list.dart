@@ -1,20 +1,46 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shequal/design/main/consultation/detail_consultant.dart';
+import 'package:shequal/models/consultant_model.dart';
+import 'package:shequal/providers/appoiment_providers.dart';
 import 'package:shequal/shared/theme.dart';
 import 'package:shequal/shared/user_preference_manager.dart';
 
 class ConsultantList extends StatefulWidget {
   final UserPreferencesManager userPreferencesManager;
   final String date;
-  final String day;
   final String time;
-  const ConsultantList({super.key, required this.userPreferencesManager, required this.date, required this.day, required this.time});
+  const ConsultantList({super.key, required this.userPreferencesManager, required this.time, required this.date});
 
   @override
   State<ConsultantList> createState() => _ConsultantListState();
 }
 
 class _ConsultantListState extends State<ConsultantList> {
+  
+  late Future<void> _consultants;
+
+  Future<void> initData() async {
+    await Provider.of<AppoimentProviders>(context, listen: true).getConsultantByDate(date: widget.date, time: widget.time);
+  }
+
+  @override
+  void didChangeDependencies() {
+    _consultants = initData();
+    super.didChangeDependencies();
+  }
+
+  @override
+  void didUpdateWidget(covariant ConsultantList oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _consultants = initData();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget title() {
@@ -157,7 +183,6 @@ class _ConsultantListState extends State<ConsultantList> {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => DetailConsultant(
                   userPreferencesManager: widget.userPreferencesManager,
                   date: widget.date,
-                  day: widget.day,
                   time: widget.time,
                 ),),);
               },
@@ -188,21 +213,40 @@ class _ConsultantListState extends State<ConsultantList> {
 
     return Scaffold(
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
-            child: Column(
-              children: [
-                title(),
-                header(),
-                consultantCard(),
-                consultantCard(),
-                consultantCard(),
-              ],
-            ),
-          ),
+        child: FutureBuilder(
+        future: _consultants,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Scaffold(
+              backgroundColor: kWhiteColor,
+              body: const Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          } else {
+            List<ConsultantModel?> consultants =
+              Provider.of<AppoimentProviders>(context, listen: false).consultants;
+            return SingleChildScrollView(
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    title(),
+                    header(),
+                    Column(
+                      children: consultants.map((e) => consultantCard()).toList(),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }
+        },
         ),
       ),
     );
+
+
   }
 }

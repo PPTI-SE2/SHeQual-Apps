@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shequal/design/main/consultation/calendar_screen.dart';
 import 'package:shequal/design/main/consultation/detail_request.dart';
+import 'package:shequal/providers/appoiment_providers.dart';
 import 'package:shequal/shared/theme.dart';
 import 'package:shequal/shared/user_preference_manager.dart';
 import 'package:shequal/shared/widget/custom_button.dart';
@@ -287,7 +289,21 @@ class _ConsultationScreenState extends State<ConsultationScreen> {
             const SizedBox(
               height: 20,
             ),
-            empty(),
+            FutureBuilder(
+              future: Provider.of<AppoimentProviders>(context, listen: false).getAppoimentByUserId(userId: widget.userPreferencesManager.getUser()!.id.toString()), 
+              builder: (context, snapshot) {
+                if(snapshot.connectionState == ConnectionState.done){
+                  if(Provider.of<AppoimentProviders>(context, listen: false).appoiments.isEmpty) {
+                    return empty();
+                  } else {
+                    print(widget.userPreferencesManager.getUser()!.id.toString() );
+                    return cardConsultation();
+                  }
+                }
+                  return const Center(child: CircularProgressIndicator());
+              },
+            )
+            // empty(),
             // cardConsultation()
           ],
         );

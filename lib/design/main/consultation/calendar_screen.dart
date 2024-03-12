@@ -58,7 +58,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
       return ConsultantList(
         userPreferencesManager: widget.userPreferencesManager,
         date: selectedDate.toString(),
-        day: selectedDate.day.toString(),
         time: selectedTime,
       );
     }));

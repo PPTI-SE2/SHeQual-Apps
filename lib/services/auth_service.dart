@@ -4,7 +4,7 @@ import 'package:shequal/models/user_model.dart';
 import 'package:shequal/shared/user_preference_manager.dart';
 
 class AuthService {
-  String baseUrl = "http://192.168.1.11:8000/api";
+  String baseUrl = "http://192.168.42.230:8000/api";
   final UserPreferencesManager _prefsManager = UserPreferencesManager();
 
   Future<void> register({

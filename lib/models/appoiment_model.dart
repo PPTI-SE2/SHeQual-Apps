@@ -3,7 +3,6 @@ class AppoimentModel {
   String? userId;
   String? consultantId;
   String? date;
-  String? day;
   String? time;
   String? status;
   DateTime? createdAt;
@@ -14,7 +13,6 @@ class AppoimentModel {
     required this.userId,
     required this.consultantId,
     required this.date,
-    required this.day,
     required this.time,
     required this.status,
     required this.createdAt,
@@ -23,10 +21,9 @@ class AppoimentModel {
 
   AppoimentModel.fromJson(Map<String, dynamic> json) {
     id = json["id"].toString();
-    userId = json["users_id"];
-    consultantId = json["consultants_id"];
+    userId = json["users_id"].toString();
+    consultantId = json["consultants_id"].toString();
     date = json["date"];
-    day = json["day"];
     time = json["time"];
     status = json["status"];
     createdAt = DateTime.parse(json["created_at"]);
@@ -39,7 +36,6 @@ class AppoimentModel {
       'users_id' : userId,
       'consultants_id': consultantId,
       'date': date,
-      'day': day,
       'time': time,
       'status' : status,
       'createdAt': createdAt,
