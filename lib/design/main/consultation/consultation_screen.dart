@@ -4,6 +4,7 @@ import 'package:shequal/design/main/consultation/calendar_screen.dart';
 import 'package:shequal/design/main/consultation/detail_request.dart';
 import 'package:shequal/models/appoiment_model.dart';
 import 'package:shequal/providers/appoiment_providers.dart';
+import 'package:shequal/services/appoiment_service.dart';
 import 'package:shequal/shared/theme.dart';
 import 'package:shequal/shared/user_preference_manager.dart';
 import 'package:shequal/shared/widget/custom_button.dart';
@@ -218,7 +219,7 @@ class _ConsultationScreenState extends State<ConsultationScreen> {
                   margin: const EdgeInsets.only(right: 20),
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: (appoimentModel.status == "pending") ? const Color(0xffFFA235) : (appoimentModel.status == "accept") ? kGreenColor : (appoimentModel.status == "cancelled") ? kRedColor : kPrimaryColor,
+                    color: (appoimentModel.status == "pending") ? const Color(0xffFFA235) : (appoimentModel.status == "accept" && appoimentModel.isBayar != 1) ? kGreenColor : (appoimentModel.status == "cancelled") ? kRedColor : kPrimaryColor,
                   ),
                   child: Center(
                     child: Icon(
@@ -248,9 +249,14 @@ class _ConsultationScreenState extends State<ConsultationScreen> {
                 ),
                 const Spacer(),
                 CustomButton(
-                  onPressed: () {
+                  onPressed: () async {
+                    bool isBayar = await AppoimentService().isBayar(appointmentId: appoimentModel.id.toString());
                     Navigator.push(context, MaterialPageRoute(builder: (context) {
-                      return DetailRequest(appoimentModel: appoimentModel, userPreferencesManager: widget.userPreferencesManager,);
+                      return DetailRequest(
+                        appoimentModel: appoimentModel, 
+                        userPreferencesManager: widget.userPreferencesManager,
+                        isBayar: isBayar,
+                      );
                     }));
                   }, 
                   color: kPrimaryColor, 

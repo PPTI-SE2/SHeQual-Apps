@@ -5,6 +5,7 @@ class AppoimentModel {
   String? consultant;
   String? message;
   String? status;
+  int? isBayar;
 
   AppoimentModel({
     required this.id,
@@ -13,6 +14,7 @@ class AppoimentModel {
     required this.consultant,
     required this.message,
     required this.status,
+    required this.isBayar,
   });
 
   AppoimentModel.fromJson(Map<String, dynamic> json) {
@@ -22,6 +24,7 @@ class AppoimentModel {
     consultant = json["consultant"];
     message = json["message"];
     status = json["status"];
+    isBayar = json["isBayar"];
   }
 
   Map<String, dynamic> toJson(){
@@ -32,6 +35,7 @@ class AppoimentModel {
       'consultant': consultant,
       'message' : message,
       'status' : status,
+      'isBayar' : isBayar,
     };
   } 
 }

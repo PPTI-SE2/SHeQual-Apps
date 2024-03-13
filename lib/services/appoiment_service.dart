@@ -110,6 +110,23 @@ class AppoimentService {
     return false;
   }
 
+  Future<bool> isBayar({
+    required String appointmentId,
+  }) async {
+    var url = Uri.parse("$baseUrl/isBayar?appointment_id=$appointmentId");
+
+    var response = await http.get(url);
+
+    print(response.body);
+    if(response.statusCode == 200) {
+      if(jsonDecode(response.body)['data'] == 1) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   Future<List<ConsultantModel?>?> getConsultantByDate({
     required String date,
     required String time,

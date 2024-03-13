@@ -12,7 +12,8 @@ import 'package:shequal/shared/widget/custom_button.dart';
 class DetailRequest extends StatefulWidget {
   final AppoimentModel appoimentModel;
   final UserPreferencesManager userPreferencesManager;
-  const DetailRequest({super.key, required this.appoimentModel, required this.userPreferencesManager});
+  final bool isBayar;
+  const DetailRequest({super.key, required this.appoimentModel, required this.userPreferencesManager, required this.isBayar});
 
   @override
   State<DetailRequest> createState() => _DetailConsultantState();
@@ -25,12 +26,19 @@ class _DetailConsultantState extends State<DetailRequest> {
     String formattedDate = DateFormat('dd MMM yyyy').format(dateTime);
     return formattedDate; // Output: 16 Mei 2024
   }
+
   String getDayOfWeek(String dateString) {
-  initializeDateFormatting('id', null);
-  DateTime date = DateTime.parse(dateString);
-  String dayOfWeek = DateFormat('EEEE', 'id').format(date);
-  return dayOfWeek;
-}
+    initializeDateFormatting('id', null);
+    DateTime date = DateTime.parse(dateString);
+    String dayOfWeek = DateFormat('EEEE', 'id').format(date);
+    return dayOfWeek;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget title() {
@@ -73,42 +81,42 @@ class _DetailConsultantState extends State<DetailRequest> {
           return Column(
             children: [
               const SizedBox(height: 40,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text("Kode Konsultasi", style: blackTextStyle.copyWith(
-                          fontWeight: semiBold,
-                          fontSize: 16
-                        ),),
-                        Text("KSL10203040", style: purpleTextStyle.copyWith(
-                          fontWeight: semiBold,
-                          fontSize: 16,
-                        ),),
-                      ],
-                    ),
-                    const SizedBox(height: 5,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text("Waktu Diterima", style: blackTextStyle),
-                        Text("23/02/2024 14.33", style: blackTextStyle.copyWith(
-                          fontWeight: semiBold,
-                          fontSize: 12,
-                        ),),
-                      ],
-                    ),
-                    const SizedBox(height: 5,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text("Waktu Bayar", style: blackTextStyle),
-                        Text("23/02/2024 14.33", style: blackTextStyle.copyWith(
-                          fontWeight: semiBold,
-                          fontSize: 12,
-                        ),),
-                      ],
-                    ),
-                    const SizedBox(height: 5,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("Kode Konsultasi", style: blackTextStyle.copyWith(
+                      fontWeight: semiBold,
+                      fontSize: 16
+                  ),),
+                  Text("KSL10203040", style: purpleTextStyle.copyWith(
+                    fontWeight: semiBold,
+                    fontSize: 16,
+                  ),),
+                ],
+              ),
+              const SizedBox(height: 5,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("Waktu Diterima", style: blackTextStyle),
+                  Text("23/02/2024 14.33", style: blackTextStyle.copyWith(
+                    fontWeight: semiBold,
+                    fontSize: 12,
+                  ),),
+                ],
+              ),
+              const SizedBox(height: 5,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("Waktu Bayar", style: blackTextStyle),
+                  Text("23/02/2024 14.33", style: blackTextStyle.copyWith(
+                    fontWeight: semiBold,
+                    fontSize: 12,
+                  ),),
+                ],
+              ),
+              const SizedBox(height: 5,),
             ],
           );
         }
@@ -119,7 +127,6 @@ class _DetailConsultantState extends State<DetailRequest> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // NOTE: TITLE
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -159,7 +166,6 @@ class _DetailConsultantState extends State<DetailRequest> {
                   )
                 ],
               ),
-              // NOTE: DESCRIPTION
               Container(
                 width: double.infinity,
                 margin: const EdgeInsets.only(top: 30),
@@ -198,9 +204,9 @@ class _DetailConsultantState extends State<DetailRequest> {
                         "Menunggu Konfirmasi" : (widget.appoimentModel.status == "accept") ?
                         "Permintaan Konsultasi\nDiterima" : "Appoiment berhasil dibayar",
                         style: blackTextStyle.copyWith(
-                        fontSize: 20,
-                        fontWeight: medium,
-                      ), textAlign: TextAlign.center,),
+                          fontSize: 20,
+                          fontWeight: medium,
+                        ), textAlign: TextAlign.center,),
                     ),
                     const SizedBox(height: 40,),
                     Text(
@@ -279,48 +285,45 @@ class _DetailConsultantState extends State<DetailRequest> {
                         ),
                       ],
                     ),
-                    
-                    // waktuPembayaran(),
-                    // NOTE: STATE: Bayar
-                    (widget.appoimentModel.status == "accept") ?
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        CustomButton(
-                          onPressed: () {
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => PilihPembayaran(appoimentModel: widget.appoimentModel, userPreferencesManager: widget.userPreferencesManager,)));
-                          },
-                          color: kPrimaryColor,
-                          text: "Bayar",
-                          textColor: kWhiteColor,
-                          width: MediaQuery.of(context).size.width / 3,
-                          margin: const EdgeInsets.only(
-                            top: 20,
+                    if (widget.appoimentModel.status == "accept" && widget.isBayar == false)
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          CustomButton(
+                            onPressed: () {
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => PilihPembayaran(appoimentModel: widget.appoimentModel, userPreferencesManager: widget.userPreferencesManager,)));
+                            },
+                            color: kPrimaryColor,
+                            text: "Bayar",
+                            textColor: kWhiteColor,
+                            width: MediaQuery.of(context).size.width / 3,
+                            margin: const EdgeInsets.only(
+                              top: 20,
+                            ),
                           ),
-                        ),
-                        CustomButton(
-                          onPressed: () async {
-                            bool isSuccess = await AppoimentService().cancelAppoiment(appointmentId: widget.appoimentModel.id.toString());
-                            if(isSuccess) {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => MainScreen(userPreferencesManager: widget.userPreferencesManager)));
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                backgroundColor: kRedColor,
-                                content: Text("Gagal Membatalkan Appoiment"),
-                              ));
-                            }
-                          },
-                          color: kRedColor,
-                          text: "Batalkan",
-                          textColor: kWhiteColor,
-                          width: MediaQuery.of(context).size.width / 3,
-                          margin: const EdgeInsets.only(
-                            top: 20,
+                          CustomButton(
+                            onPressed: () async {
+                              bool isSuccess = await AppoimentService().cancelAppoiment(appointmentId: widget.appoimentModel.id.toString());
+                              if(isSuccess) {
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => MainScreen(userPreferencesManager: widget.userPreferencesManager)));
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                  backgroundColor: kRedColor,
+                                  content: Text("Gagal Membatalkan Appoiment"),
+                                ));
+                              }
+                            },
+                            color: kRedColor,
+                            text: "Batalkan",
+                            textColor: kWhiteColor,
+                            width: MediaQuery.of(context).size.width / 3,
+                            margin: const EdgeInsets.only(
+                              top: 20,
+                            ),
                           ),
-                        ),
-                      ],
-                    ) : (widget.appoimentModel.status == "bayar") ?
-                    waktuPembayaran() : const SizedBox()
+                        ],
+                      ),
+                    if (widget.isBayar && widget.appoimentModel.status == "accept") waktuPembayaran(),                    
                   ],
                 ),
               ),
