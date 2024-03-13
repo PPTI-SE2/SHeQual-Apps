@@ -35,23 +35,30 @@ class _ConsultationScreenState extends State<ConsultationScreen> {
     Widget profile() {
       return Column(
         children: [
-          Text(
-            widget.userPreferencesManager.getUser()!.username.toString(),
-            style: blackTextStyle.copyWith(
-              fontSize: 18,
-              fontWeight: medium,
-            ),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
+          const SizedBox(height: 20,),
+          // Text(
+          //   widget.userPreferencesManager.getUser()!.username.toString(),
+          //   style: blackTextStyle.copyWith(
+          //     fontSize: 18,
+          //     fontWeight: medium,
+          //   ),
+          // ),
           Container(
-            width: 60,
-            height: 60,
+            width: 80,
+            height: 80,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               color: kGreyColor,
+              image: DecorationImage(
+                image: AssetImage(
+                  "assets/home/profile.png"
+                ),
+                fit: BoxFit.cover,
+              ),
             ),
+          ),
+          const SizedBox(
+            height: 5,
           ),
           Container(
             padding: const EdgeInsets.symmetric(
@@ -351,7 +358,7 @@ class _ConsultationScreenState extends State<ConsultationScreen> {
                 fontWeight: semiBold,
               ),
             ),
-            header(),
+            // header(),
             profile(),
             consultationContent(),
             const SizedBox(

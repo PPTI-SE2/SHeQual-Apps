@@ -48,23 +48,26 @@ class _ConsultantListState extends State<ConsultantList> {
   @override
   Widget build(BuildContext context) {
     Widget title() {
-      return Row(
-        children: [
-          GestureDetector(
-            onTap: () {
-              Navigator.pop(context);
-            },
-            child: Icon(Icons.arrow_back_ios, color: kBlackColor),
-          ),
-          const SizedBox(width: 10),
-          Text(
-            "Hai Asley, ini konsultan yang tersedia",
-            style: blackTextStyle.copyWith(
-              fontSize: 16,
-              fontWeight: semiBold,
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 20),
+        child: Row(
+          children: [
+            GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Icon(Icons.arrow_back_ios, color: kBlackColor),
             ),
-          ),
-        ],
+            const SizedBox(width: 10),
+            Text(
+              "Hai Asley, ini konsultan yang tersedia",
+              style: blackTextStyle.copyWith(
+                fontSize: 16,
+                fontWeight: semiBold,
+              ),
+            ),
+          ],
+        ),
       );
     }
 
@@ -76,7 +79,6 @@ class _ConsultantListState extends State<ConsultantList> {
         ),
         margin: const EdgeInsets.only(
           bottom: 15,
-          top: 15,
         ),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(18),
@@ -231,7 +233,7 @@ class _ConsultantListState extends State<ConsultantList> {
                   Provider.of<AppoimentProviders>(context, listen: false)
                       .consultants;
               return SingleChildScrollView(
-                child: Container(
+                child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -247,11 +249,8 @@ class _ConsultantListState extends State<ConsultantList> {
                 ),
               );
             }
-            return Scaffold(
-              backgroundColor: kWhiteColor,
-              body: const Center(
+            return const Center(
                 child: CircularProgressIndicator(),
-              ),
             );
           },
         ),

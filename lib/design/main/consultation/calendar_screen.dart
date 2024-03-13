@@ -197,7 +197,7 @@ class TimeDropdown extends StatelessWidget {
       child: DropdownButton<String>(
         isExpanded: true,
         value: value,
-        items: [
+        items: const [
           DropdownMenuItem(
             child: Text("08:00"),
             value: "08:00",
@@ -205,6 +205,26 @@ class TimeDropdown extends StatelessWidget {
           DropdownMenuItem(
             child: Text("09:00"),
             value: "09:00",
+          ),
+          DropdownMenuItem(
+            child: Text("10:00"),
+            value: "10:00",
+          ),
+          DropdownMenuItem(
+            child: Text("11:00"),
+            value: "11:00",
+          ),
+          DropdownMenuItem(
+            child: Text("12:00"),
+            value: "12:00",
+          ),
+          DropdownMenuItem(
+            child: Text("13:00"),
+            value: "13:00",
+          ),
+          DropdownMenuItem(
+            child: Text("14:00"),
+            value: "14:00",
           ),
         ],
         onChanged: onChanged,
