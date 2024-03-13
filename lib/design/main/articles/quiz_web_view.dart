@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:shequal/design/main/articles/success_quiz.dart';
+import 'package:shequal/services/article_service.dart';
 import 'package:shequal/shared/theme.dart';
+import 'package:shequal/shared/user_preference_manager.dart';
 import 'package:shequal/shared/widget/custom_button.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class QuizWebView extends StatefulWidget {
+  final UserPreferencesManager userPreferencesManager;
+
+  const QuizWebView({super.key, required this.userPreferencesManager});
+
   @override
   _QuizWebViewState createState() => _QuizWebViewState();
 }
@@ -28,11 +35,21 @@ class _QuizWebViewState extends State<QuizWebView> {
         },
       ),
     )
-    ..loadRequest(Uri.parse('https://awve3bsjmmm.typeform.com/to/IoxpVrYv'));
+    ..loadRequest(Uri.parse('https://cbt9ncwxnu9.typeform.com/to/c57JAZjs'));
 
     void readJS() async {
-      var html = await controller.runJavaScriptReturningResult("window.document.getElementsByTagName('span')[0].textContent;");
-      print(html.toString().split("/")[0]);
+      var html = await controller.runJavaScriptReturningResult("window.document.getElementsByTagName('span')[1].textContent;");
+      String text = html.toString().split("/")[0];
+      print(text.split("benar ")[1]);
+      text = text.split("benar ")[1];
+      if(text.contains(RegExp("^[0-9]"))){
+        bool isSuccess = await ArticleService().putPoin(userId: widget.userPreferencesManager.getUser()!.id.toString(), poin: (int.parse(text) * 10).toString());
+        if(isSuccess) {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => SuccessQuiz(poin: text, userPreferencesManager: widget.userPreferencesManager,)));
+        } else {
+          print("Gagal");
+        }
+      }
     }
 
   @override

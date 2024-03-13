@@ -33,4 +33,33 @@ class ArticleService {
 
     throw Exception("Gagal Get Article");
   }
+
+  Future<bool> putPoin({
+    required String userId,
+    required String poin,
+  }) async {
+    var url = Uri.parse("$baseUrl/putPoint");
+
+    var headers = {
+      'content-type': 'application/json',
+    };
+
+    var body = jsonEncode({
+      "user_id": userId,
+      "point": poin,
+    });
+
+    var response = await http.put(
+      url,
+      headers: headers,
+      body: body,
+    );
+
+    print(response.body);
+    if(response.statusCode == 200) {
+      return true;
+    }
+
+    return false;
+  }
 }

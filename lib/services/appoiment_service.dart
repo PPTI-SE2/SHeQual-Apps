@@ -63,6 +63,53 @@ class AppoimentService {
     return null;
   }
 
+  Future<bool> payAppoiment({
+    required String appointmentId,
+  }) async {
+    var url = Uri.parse("$baseUrl/payment?appointment_id=$appointmentId");
+
+    var headers = {
+      'content-type': 'application/json',
+    };
+
+    var response = await http.put(
+      url,
+      headers: headers,
+    );
+
+    print(appointmentId);
+    print(response.body);
+    if(response.statusCode == 200) {
+      print("Berhasil Bayar Appoiment");
+      return true;
+    }
+
+    return false;
+  }
+
+  Future<bool> cancelAppoiment({
+    required String appointmentId,
+  }) async {
+    var url = Uri.parse("$baseUrl/cancellAppointment?appointment_id=$appointmentId");
+
+    var headers = {
+      'content-type': 'application/json',
+    };
+
+    var response = await http.put(
+      url,
+      headers: headers,
+    );
+
+    print(response.body);
+    if(response.statusCode == 200) {
+      print("Berhasil Cancel Appoiment");
+      return true;
+    }
+
+    return false;
+  }
+
   Future<List<ConsultantModel?>?> getConsultantByDate({
     required String date,
     required String time,

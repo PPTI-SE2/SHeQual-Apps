@@ -65,7 +65,7 @@ class _DetailPostScreenState extends State<DetailPostScreen> {
         decoration: BoxDecoration(
           color: kGreyColor,
           image: DecorationImage(
-            image: NetworkImage("${widget.postModel!.imgPost}"),
+            image: NetworkImage("http://192.168.130.163:8000/uploads/${widget.postModel!.imgPost}"),
             fit: BoxFit.cover,
           ),
         ),
@@ -105,10 +105,14 @@ class _DetailPostScreenState extends State<DetailPostScreen> {
                   width: 2,
                   color: const Color(0xffDBD7EC),
                 ),
+                image: DecorationImage(
+                  image: NetworkImage(widget.postModel!.imgProfile.toString()),
+                  fit: BoxFit.cover, 
+                ),
               ),
             ),
             Text(
-              "Gajah Terbang",
+              widget.postModel!.username.toString(),
               style: purpleTextStyle.copyWith(
                 fontWeight: medium,
               ),
@@ -298,7 +302,8 @@ class _DetailPostScreenState extends State<DetailPostScreen> {
                       userId: widget.userPreferencesManager.getUser()!.id.toString(), 
                       details: commentController.text
                     );
-
+                commentResult!.username = widget.userPreferencesManager.getUser()!.username;
+                
                 if(commentResult != null) {
                   setState(() {
                     widget.postModel!.comments!.add(commentResult);

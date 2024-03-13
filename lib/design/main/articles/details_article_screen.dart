@@ -3,11 +3,13 @@ import 'package:shequal/design/main/articles/quiz_web_view.dart';
 import 'package:shequal/models/article_model.dart';
 import 'package:shequal/shared/theme.dart';
 import 'package:intl/intl.dart';
+import 'package:shequal/shared/user_preference_manager.dart';
 import 'package:shequal/shared/widget/custom_button.dart';
 
 class DetailArticleScreen extends StatelessWidget {
   final ArticleModel articleModel;
-  const DetailArticleScreen({super.key, required this.articleModel});
+  final UserPreferencesManager userPreferencesManager;
+  const DetailArticleScreen({super.key, required this.articleModel, required this.userPreferencesManager});
 
   @override
   Widget build(BuildContext context) {
@@ -142,7 +144,7 @@ class DetailArticleScreen extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => QuizWebView(),
+              builder: (context) => QuizWebView(userPreferencesManager: userPreferencesManager,),
             ),
           );
         },

@@ -41,7 +41,7 @@ class AppRoutes {
     post: (context) => DetailPostScreen(userPreferencesManager: userPreferencesManager,),
     editProfile: (context) => EditProfileScreen(userPreferencesManager: userPreferencesManager,),
     search: (context) => const SearchScreen(),
-    articles: (context) => const ArticleScreen(),
+    articles: (context) => ArticleScreen(userPreferencesManager: userPreferencesManager,),
     addPost: (context) => AddPostScreen(userPreferencesManager: userPreferencesManager,),
   };
 }

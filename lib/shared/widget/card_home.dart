@@ -100,7 +100,7 @@ class CardHome extends StatelessWidget {
             color: kGreyColor,
             borderRadius: BorderRadius.circular(18),
             image: DecorationImage(
-              image: NetworkImage("http://192.168.1.11:8000/${postModel.imgPost}"),
+              image: NetworkImage("http://192.168.130.163:8000/uploads/${postModel.imgPost}"),
               fit: BoxFit.cover,
             ),
           ),

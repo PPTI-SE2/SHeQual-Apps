@@ -1,10 +1,17 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:shequal/design/main/consultation/success_consultation.dart';
+import 'package:shequal/models/appoiment_model.dart';
+import 'package:shequal/services/appoiment_service.dart';
 import 'package:shequal/shared/theme.dart';
+import 'package:shequal/shared/user_preference_manager.dart';
 import 'package:shequal/shared/widget/custom_button.dart';
 
 class PilihPembayaran extends StatefulWidget {
-  const PilihPembayaran({super.key});
+  final UserPreferencesManager userPreferencesManager;
+  final AppoimentModel appoimentModel;
+  const PilihPembayaran({super.key, required this.appoimentModel, required this.userPreferencesManager});
 
   @override
   State<PilihPembayaran> createState() => _PilihPembayaranState();
@@ -85,7 +92,7 @@ class _PilihPembayaranState extends State<PilihPembayaran> {
                 borderRadius: BorderRadius.circular(15),
               ),
               child: Text(
-                "135",
+                widget.userPreferencesManager.getUser()!.poin.toString(),
                 style: blackTextStyle.copyWith(
                   fontWeight: semiBold,
                 ),
@@ -137,8 +144,20 @@ class _PilihPembayaranState extends State<PilihPembayaran> {
             ),
             const SizedBox(height: 20,),
             CustomButton(
-                onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => SuccessConsultation(isRequest: false)));
+                onPressed: () async {
+                  bool isSuccess = await AppoimentService().payAppoiment(appointmentId: widget.appoimentModel.id.toString());
+                  if(isSuccess) {
+                    var user = widget.userPreferencesManager.getUser();
+                    user!.poin = (user.poin! - 100);
+                    widget.userPreferencesManager.saveUser(user);
+                    
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => SuccessConsultation()));
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      backgroundColor: kRedColor,
+                      content: const Text("Gagal Melakukan Pembayaran"),
+                    ));
+                  }
                 },
                 color: kPrimaryColor,
                 text: "Bayar",

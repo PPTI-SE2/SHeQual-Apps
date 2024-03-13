@@ -110,7 +110,7 @@ class _SignUpPageState extends State<SignUpPage> {
         return CustomTextFormField(
           title: 'Kata sandi',
           hintText: 'Kata sandi anda',
-          obsecureText: true,
+          obscureText: true,
           controller: passwordController,
         );
       }
@@ -119,7 +119,7 @@ class _SignUpPageState extends State<SignUpPage> {
         return CustomTextFormField(
           title: 'Konfirmasi Kata sandi',
           hintText: 'Konfirmasi Kata sandi anda',
-          obsecureText: true,
+          obscureText: true,
           controller: passwordConfirmController,
         );
       }

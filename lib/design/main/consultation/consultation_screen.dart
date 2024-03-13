@@ -35,7 +35,7 @@ class _ConsultationScreenState extends State<ConsultationScreen> {
       return Column(
         children: [
           Text(
-            "Gwen Ashley",
+            widget.userPreferencesManager.getUser()!.username.toString(),
             style: blackTextStyle.copyWith(
               fontSize: 18,
               fontWeight: medium,
@@ -74,7 +74,7 @@ class _ConsultationScreenState extends State<ConsultationScreen> {
                   width: 5,
                 ),
                 Text(
-                  "135",
+                  widget.userPreferencesManager.getUser()!.poin.toString() + " Poin",
                   style: blackTextStyle.copyWith(
                     fontSize: 12,
                     fontWeight: semiBold,
@@ -197,25 +197,6 @@ class _ConsultationScreenState extends State<ConsultationScreen> {
                   textAlign: TextAlign.center,
                 ),
               ),
-              const SizedBox(
-                height: 20,
-              ),
-              Center(
-                child: CustomButton(
-                  onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return CalendarScreen(
-                        userPreferencesManager: widget.userPreferencesManager,
-                      );
-                    }));
-                  },
-                  color: kPrimaryColor,
-                  text: "Ayo buat janji",
-                  textColor: kWhiteColor,
-                  width: 170,
-                ),
-              ),
             ],
           );
         }
@@ -224,6 +205,7 @@ class _ConsultationScreenState extends State<ConsultationScreen> {
           return Container(
             width: double.infinity,
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+            margin: const EdgeInsets.only(bottom: 20),
             decoration: BoxDecoration(
               borderRadius: BorderRadiusDirectional.circular(18),
               color: kWhiteColor,
@@ -236,11 +218,11 @@ class _ConsultationScreenState extends State<ConsultationScreen> {
                   margin: const EdgeInsets.only(right: 20),
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: (appoimentModel.status == "pending") ? const Color(0xffFFA235) : (appoimentModel.status == "accept") ? kGreenColor : kPrimaryColor,
+                    color: (appoimentModel.status == "pending") ? const Color(0xffFFA235) : (appoimentModel.status == "accept") ? kGreenColor : (appoimentModel.status == "cancelled") ? kRedColor : kPrimaryColor,
                   ),
                   child: Center(
                     child: Icon(
-                      (appoimentModel.status == "pending") ? Icons.access_time : Icons.check, 
+                      (appoimentModel.status == "pending") ? Icons.access_time : (appoimentModel.status == "cancelled") ? Icons.close : Icons.check, 
                       color: kWhiteColor,
                     ),
                   ),
@@ -268,7 +250,7 @@ class _ConsultationScreenState extends State<ConsultationScreen> {
                 CustomButton(
                   onPressed: () {
                     Navigator.push(context, MaterialPageRoute(builder: (context) {
-                      return DetailRequest(appoimentModel: appoimentModel,);
+                      return DetailRequest(appoimentModel: appoimentModel, userPreferencesManager: widget.userPreferencesManager,);
                     }));
                   }, 
                   color: kPrimaryColor, 
@@ -300,7 +282,6 @@ class _ConsultationScreenState extends State<ConsultationScreen> {
                   if(Provider.of<AppoimentProviders>(context, listen: false).appoiments.isEmpty) {
                     return empty();
                   } else {
-                    print(widget.userPreferencesManager.getUser()!.id.toString() );
                     return Column(
                       children: Provider.of<AppoimentProviders>(context, listen: false).appoiments.map((e) => cardConsultation(e!)).toList(),
                     );
@@ -308,7 +289,26 @@ class _ConsultationScreenState extends State<ConsultationScreen> {
                 }
                   return const Center(child: CircularProgressIndicator());
               },
-            )
+            ),
+            const SizedBox(
+                height: 20,
+              ),
+              Center(
+                child: CustomButton(
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return CalendarScreen(
+                        userPreferencesManager: widget.userPreferencesManager,
+                      );
+                    }));
+                  },
+                  color: kPrimaryColor,
+                  text: "Ayo buat janji",
+                  textColor: kWhiteColor,
+                  width: 170,
+                ),
+              ),
             // empty(),
             // cardConsultation()
           ],

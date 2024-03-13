@@ -79,7 +79,7 @@ class _SignInPageState extends State<SignInPage> {
         return CustomTextFormField(
           title: 'Password',
           hintText: 'Password anda',
-          obsecureText: true,
+          obscureText: true,
           controller: passwordController,
         );
       }

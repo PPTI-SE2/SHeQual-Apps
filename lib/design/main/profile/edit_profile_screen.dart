@@ -127,7 +127,7 @@ class EditProfileScreen extends StatelessWidget {
         return CustomTextFormField(
           title: 'Kata sandi',
           hintText: 'Kata sandi anda',
-          obsecureText: true,
+          obscureText: true,
           controller: passwordController,
         );
       }

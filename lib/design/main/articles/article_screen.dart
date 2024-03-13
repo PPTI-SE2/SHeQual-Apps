@@ -4,9 +4,11 @@ import 'package:shequal/design/main/articles/details_article_screen.dart';
 import 'package:shequal/models/article_model.dart';
 import 'package:shequal/providers/article_providers.dart';
 import 'package:shequal/shared/theme.dart';
+import 'package:shequal/shared/user_preference_manager.dart';
 
 class ArticleScreen extends StatefulWidget {
-  const ArticleScreen({super.key});
+  final UserPreferencesManager userPreferencesManager;
+  const ArticleScreen({super.key, required this.userPreferencesManager});
 
   @override
   State<ArticleScreen> createState() => _ArticleScreenState();
@@ -122,7 +124,7 @@ class _ArticleScreenState extends State<ArticleScreen> {
       return GestureDetector(
         onTap: () {
           Navigator.push(context,
-              MaterialPageRoute(builder: (context) => DetailArticleScreen(articleModel: articleModel,)));
+              MaterialPageRoute(builder: (context) => DetailArticleScreen(articleModel: articleModel, userPreferencesManager: widget.userPreferencesManager)));
         },
         child: Container(
           width: double.infinity,

@@ -2,13 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:shequal/design/main/consultation/pilih_pembayaran.dart';
+import 'package:shequal/design/main/main_screen.dart';
 import 'package:shequal/models/appoiment_model.dart';
+import 'package:shequal/services/appoiment_service.dart';
 import 'package:shequal/shared/theme.dart';
+import 'package:shequal/shared/user_preference_manager.dart';
 import 'package:shequal/shared/widget/custom_button.dart';
 
 class DetailRequest extends StatefulWidget {
   final AppoimentModel appoimentModel;
-  const DetailRequest({super.key, required this.appoimentModel});
+  final UserPreferencesManager userPreferencesManager;
+  const DetailRequest({super.key, required this.appoimentModel, required this.userPreferencesManager});
 
   @override
   State<DetailRequest> createState() => _DetailConsultantState();
@@ -176,11 +180,11 @@ class _DetailConsultantState extends State<DetailRequest> {
                         height: 100,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: (widget.appoimentModel.status == "pending") ? const Color(0xffFFA235) : (widget.appoimentModel.status == "accept") ? kGreenColor : kPrimaryColor,
+                          color: (widget.appoimentModel.status == "pending") ? const Color(0xffFFA235) : (widget.appoimentModel.status == "accept") ? kGreenColor : (widget.appoimentModel.status == "cancelled") ? kRedColor : kPrimaryColor,
                         ),
                         child: Center(
                           child: Icon(
-                            (widget.appoimentModel.status == "pending") ? Icons.access_time : (widget.appoimentModel.status == "accept") ? Icons.check : Icons.done,
+                            (widget.appoimentModel.status == "pending") ? Icons.access_time : (widget.appoimentModel.status == "accept") ? Icons.check : (widget.appoimentModel.status == "cancelled") ? Icons.close : Icons.check,
                             color: Colors.white,
                             size: 50,
                           ),
@@ -284,7 +288,7 @@ class _DetailConsultantState extends State<DetailRequest> {
                       children: [
                         CustomButton(
                           onPressed: () {
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => const PilihPembayaran()));
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => PilihPembayaran(appoimentModel: widget.appoimentModel, userPreferencesManager: widget.userPreferencesManager,)));
                           },
                           color: kPrimaryColor,
                           text: "Bayar",
@@ -295,8 +299,16 @@ class _DetailConsultantState extends State<DetailRequest> {
                           ),
                         ),
                         CustomButton(
-                          onPressed: () {
-                            Navigator.pop(context);
+                          onPressed: () async {
+                            bool isSuccess = await AppoimentService().cancelAppoiment(appointmentId: widget.appoimentModel.id.toString());
+                            if(isSuccess) {
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => MainScreen(userPreferencesManager: widget.userPreferencesManager)));
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                backgroundColor: kRedColor,
+                                content: Text("Gagal Membatalkan Appoiment"),
+                              ));
+                            }
                           },
                           color: kRedColor,
                           text: "Batalkan",
