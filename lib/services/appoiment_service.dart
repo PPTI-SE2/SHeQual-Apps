@@ -5,7 +5,7 @@ import 'package:shequal/models/appoiment_model.dart';
 import 'package:shequal/models/consultant_model.dart';
 
 class AppoimentService {
-  String baseUrl = "http://192.168.42.230:8000/api";
+  String baseUrl = "http://192.168.130.163:8000/api";
 
   Future<List<AppoimentModel?>?> getAppoimentByUserId({
     required String userId,

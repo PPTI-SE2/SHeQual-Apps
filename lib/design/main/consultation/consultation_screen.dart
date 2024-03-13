@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shequal/design/main/consultation/calendar_screen.dart';
 import 'package:shequal/design/main/consultation/detail_request.dart';
+import 'package:shequal/models/appoiment_model.dart';
 import 'package:shequal/providers/appoiment_providers.dart';
 import 'package:shequal/shared/theme.dart';
 import 'package:shequal/shared/user_preference_manager.dart';
@@ -219,7 +220,7 @@ class _ConsultationScreenState extends State<ConsultationScreen> {
           );
         }
 
-        Widget cardConsultation() {
+        Widget cardConsultation(AppoimentModel appoimentModel) {
           return Container(
             width: double.infinity,
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
@@ -235,17 +236,20 @@ class _ConsultationScreenState extends State<ConsultationScreen> {
                   margin: const EdgeInsets.only(right: 20),
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Colors.yellow[700],
+                    color: (appoimentModel.status == "pending") ? const Color(0xffFFA235) : (appoimentModel.status == "accept") ? kGreenColor : kPrimaryColor,
                   ),
                   child: Center(
-                    child: Icon(Icons.pending_actions, color: kWhiteColor),
+                    child: Icon(
+                      (appoimentModel.status == "pending") ? Icons.access_time : Icons.check, 
+                      color: kWhiteColor,
+                    ),
                   ),
                 ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Dr. Kurani",
+                      "${appoimentModel.consultant}",
                       style: blackTextStyle.copyWith(
                         fontSize: 16,
                         fontWeight: semiBold,
@@ -264,7 +268,7 @@ class _ConsultationScreenState extends State<ConsultationScreen> {
                 CustomButton(
                   onPressed: () {
                     Navigator.push(context, MaterialPageRoute(builder: (context) {
-                      return const DetailRequest();
+                      return DetailRequest(appoimentModel: appoimentModel,);
                     }));
                   }, 
                   color: kPrimaryColor, 
@@ -297,7 +301,9 @@ class _ConsultationScreenState extends State<ConsultationScreen> {
                     return empty();
                   } else {
                     print(widget.userPreferencesManager.getUser()!.id.toString() );
-                    return cardConsultation();
+                    return Column(
+                      children: Provider.of<AppoimentProviders>(context, listen: false).appoiments.map((e) => cardConsultation(e!)).toList(),
+                    );
                   }
                 }
                   return const Center(child: CircularProgressIndicator());

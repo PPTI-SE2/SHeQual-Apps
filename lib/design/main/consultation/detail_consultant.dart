@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shequal/design/main/consultation/success_consultation.dart';
+import 'package:shequal/models/consultant_model.dart';
 import 'package:shequal/providers/appoiment_providers.dart';
 import 'package:shequal/shared/theme.dart';
 import 'package:shequal/shared/user_preference_manager.dart';
@@ -10,7 +11,8 @@ class DetailConsultant extends StatefulWidget {
   final UserPreferencesManager userPreferencesManager;
   final String date;
   final String time;
-  const DetailConsultant({super.key, required this.userPreferencesManager, required this.date, required this.time});
+  final ConsultantModel consultantModel;
+  const DetailConsultant({super.key, required this.userPreferencesManager, required this.date, required this.time, required this.consultantModel});
 
   @override
   State<DetailConsultant> createState() => _DetailConsultantState();
@@ -69,7 +71,7 @@ class _DetailConsultantState extends State<DetailConsultant> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Dr. Stella Kane",
+                        "Dr. ${widget.consultantModel.name}",
                         style: whiteTextStyle.copyWith(
                           fontSize: 24,
                           fontWeight: semiBold,
@@ -127,7 +129,7 @@ class _DetailConsultantState extends State<DetailConsultant> {
                       height: 6,
                     ),
                     Text(
-                      """Lorem ipsum dolor sit amet, ut labore et dolore magna aliqua. exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                      """${widget.consultantModel.bioData}.
                       """,
                       style: blackTextStyle.copyWith(
                         fontSize: 14,
@@ -191,7 +193,7 @@ class _DetailConsultantState extends State<DetailConsultant> {
                         bool isSucess = await Provider.of<AppoimentProviders>(context, listen: false)
                             .makeAppoiment(
                                 userId: widget.userPreferencesManager.getUser()!.id.toString(),
-                                consultantId: "5",
+                                consultantId: widget.consultantModel.id.toString(),
                                 date: widget.date,
                                 time: widget.time,
                             );

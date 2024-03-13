@@ -5,7 +5,7 @@ import 'package:shequal/models/comment_model.dart';
 import 'package:shequal/models/post_model.dart';
 
 class PostService {
-  String baseUrl = "http://192.168.42.230:8000/api";
+  String baseUrl = "http://192.168.130.163:8000/api";
 
   Future<List<PostModel>> getPost() async {
     var url = Uri.parse("$baseUrl/posts");

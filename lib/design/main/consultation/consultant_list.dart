@@ -10,18 +10,22 @@ class ConsultantList extends StatefulWidget {
   final UserPreferencesManager userPreferencesManager;
   final String date;
   final String time;
-  const ConsultantList({super.key, required this.userPreferencesManager, required this.time, required this.date});
+  const ConsultantList(
+      {super.key,
+      required this.userPreferencesManager,
+      required this.time,
+      required this.date});
 
   @override
   State<ConsultantList> createState() => _ConsultantListState();
 }
 
 class _ConsultantListState extends State<ConsultantList> {
-  
   late Future<void> _consultants;
 
   Future<void> initData() async {
-    await Provider.of<AppoimentProviders>(context, listen: true).getConsultantByDate(date: widget.date, time: widget.time);
+    await Provider.of<AppoimentProviders>(context, listen: false)
+        .getConsultantByDate(date: widget.date, time: widget.time);
   }
 
   @override
@@ -121,7 +125,7 @@ class _ConsultantListState extends State<ConsultantList> {
       );
     }
 
-    Widget consultantCard() {
+    Widget consultantCard(ConsultantModel consultant) {
       return Container(
         width: double.infinity,
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
@@ -152,7 +156,7 @@ class _ConsultantListState extends State<ConsultantList> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Dr. Stella Kane",
+                  consultant.name.toString(),
                   style: blackTextStyle.copyWith(
                     fontSize: 16,
                     fontWeight: medium,
@@ -180,11 +184,17 @@ class _ConsultantListState extends State<ConsultantList> {
             const Spacer(),
             TextButton(
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => DetailConsultant(
-                  userPreferencesManager: widget.userPreferencesManager,
-                  date: widget.date,
-                  time: widget.time,
-                ),),);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => DetailConsultant(
+                      userPreferencesManager: widget.userPreferencesManager,
+                      date: widget.date,
+                      time: widget.time,
+                      consultantModel: consultant,
+                    ),
+                  ),
+                );
               },
               child: Container(
                 padding: const EdgeInsets.symmetric(
@@ -214,39 +224,38 @@ class _ConsultantListState extends State<ConsultantList> {
     return Scaffold(
       body: SafeArea(
         child: FutureBuilder(
-        future: _consultants,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
+          future: _consultants,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              List<ConsultantModel?> consultants =
+                  Provider.of<AppoimentProviders>(context, listen: false)
+                      .consultants;
+              return SingleChildScrollView(
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      title(),
+                      header(),
+                      Column(
+                        children:
+                            consultants.map((e) => consultantCard(e!)).toList(),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }
             return Scaffold(
               backgroundColor: kWhiteColor,
               body: const Center(
                 child: CircularProgressIndicator(),
               ),
             );
-          } else {
-            List<ConsultantModel?> consultants =
-              Provider.of<AppoimentProviders>(context, listen: false).consultants;
-            return SingleChildScrollView(
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    title(),
-                    header(),
-                    Column(
-                      children: consultants.map((e) => consultantCard()).toList(),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          }
-        },
+          },
         ),
       ),
     );
-
-
   }
 }

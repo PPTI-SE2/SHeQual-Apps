@@ -1,16 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
 import 'package:shequal/design/main/consultation/pilih_pembayaran.dart';
+import 'package:shequal/models/appoiment_model.dart';
 import 'package:shequal/shared/theme.dart';
 import 'package:shequal/shared/widget/custom_button.dart';
 
 class DetailRequest extends StatefulWidget {
-  const DetailRequest({super.key});
+  final AppoimentModel appoimentModel;
+  const DetailRequest({super.key, required this.appoimentModel});
 
   @override
   State<DetailRequest> createState() => _DetailConsultantState();
 }
 
 class _DetailConsultantState extends State<DetailRequest> {
+  String convertDate() {
+    String timestamp = widget.appoimentModel.date.toString();
+    DateTime dateTime = DateTime.parse(timestamp);
+    String formattedDate = DateFormat('dd MMM yyyy').format(dateTime);
+    return formattedDate; // Output: 16 Mei 2024
+  }
+  String getDayOfWeek(String dateString) {
+  initializeDateFormatting('id', null);
+  DateTime date = DateTime.parse(dateString);
+  String dayOfWeek = DateFormat('EEEE', 'id').format(date);
+  return dayOfWeek;
+}
   @override
   Widget build(BuildContext context) {
     Widget title() {
@@ -107,7 +123,7 @@ class _DetailConsultantState extends State<DetailRequest> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Dr. Stella Kane",
+                        "Dr. ${widget.appoimentModel.consultant}",
                         style: whiteTextStyle.copyWith(
                           fontSize: 24,
                           fontWeight: semiBold,
@@ -160,11 +176,11 @@ class _DetailConsultantState extends State<DetailRequest> {
                         height: 100,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: kGreenColor,
+                          color: (widget.appoimentModel.status == "pending") ? const Color(0xffFFA235) : (widget.appoimentModel.status == "accept") ? kGreenColor : kPrimaryColor,
                         ),
-                        child: const Center(
+                        child: Center(
                           child: Icon(
-                            Icons.check,
+                            (widget.appoimentModel.status == "pending") ? Icons.access_time : (widget.appoimentModel.status == "accept") ? Icons.check : Icons.done,
                             color: Colors.white,
                             size: 50,
                           ),
@@ -173,7 +189,11 @@ class _DetailConsultantState extends State<DetailRequest> {
                     ),
                     const SizedBox(height: 20,),
                     Center(
-                      child: Text("Permintaan Konsultasi\nDiterima", style: blackTextStyle.copyWith(
+                      child: Text(
+                        (widget.appoimentModel.status! == "pending") ?
+                        "Menunggu Konfirmasi" : (widget.appoimentModel.status == "accept") ?
+                        "Permintaan Konsultasi\nDiterima" : "Appoiment berhasil dibayar",
+                        style: blackTextStyle.copyWith(
                         fontSize: 20,
                         fontWeight: medium,
                       ), textAlign: TextAlign.center,),
@@ -193,7 +213,7 @@ class _DetailConsultantState extends State<DetailRequest> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text("Hari", style: blackTextStyle,),
-                            Text("Sabtu", style: purpleTextStyle.copyWith(
+                            Text(getDayOfWeek(widget.appoimentModel.date.toString()), style: purpleTextStyle.copyWith(
                               fontWeight: bold,
                               fontSize: 18,
                             ),),
@@ -204,7 +224,7 @@ class _DetailConsultantState extends State<DetailRequest> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text("Tanggal", style: blackTextStyle,),
-                            Text("24 Februari 2024", style: blackTextStyle.copyWith(
+                            Text(convertDate(), style: blackTextStyle.copyWith(
                               fontWeight: semiBold,
                             ),),
                           ],
@@ -214,7 +234,7 @@ class _DetailConsultantState extends State<DetailRequest> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text("Waktu", style: blackTextStyle,),
-                            Text("16.00 - 17.30 WIB", style: blackTextStyle.copyWith(
+                            Text("${widget.appoimentModel.time} WIB", style: blackTextStyle.copyWith(
                               fontWeight: semiBold,
                             ),),
                           ],
@@ -258,6 +278,7 @@ class _DetailConsultantState extends State<DetailRequest> {
                     
                     // waktuPembayaran(),
                     // NOTE: STATE: Bayar
+                    (widget.appoimentModel.status == "accept") ?
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -286,7 +307,8 @@ class _DetailConsultantState extends State<DetailRequest> {
                           ),
                         ),
                       ],
-                    ),
+                    ) : (widget.appoimentModel.status == "bayar") ?
+                    waktuPembayaran() : const SizedBox()
                   ],
                 ),
               ),

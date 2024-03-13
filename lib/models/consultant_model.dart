@@ -1,8 +1,7 @@
 class ConsultantModel {
   String? id;
   String? usersId;
-  String? patients;
-  String? experience;
+  String? name;
   String? bioData;
   String? status;
   DateTime? createdAt;
@@ -11,8 +10,7 @@ class ConsultantModel {
   ConsultantModel({
     required this.id,
     required this.usersId,
-    required this.patients,
-    required this.experience,
+    required this.name,
     required this.bioData,
     required this.status,
     required this.createdAt,
@@ -21,10 +19,9 @@ class ConsultantModel {
 
   ConsultantModel.fromJson(Map<String, dynamic> json) {
     id = json["id"].toString();
-    usersId = json["users_id"];
-    patients = json["patients"];
-    experience = json["experience"];
-    bioData = json["bio_data"];
+    usersId = json["users_id"].toString();
+    name = json["name"];
+    bioData = json["bio"];
     status = json["status"];
     createdAt = DateTime.parse(json["created_at"]);
     updatedAt = DateTime.parse(json["updated_at"]);
@@ -34,9 +31,8 @@ class ConsultantModel {
     return {
       'id': id,
       'users_id': usersId,
-      'patients': patients,
-      'experience': experience,
-      'bio_data': bioData,
+      'name': name,
+      'bio': bioData,
       'status': status,
       'createdAt': createdAt,
       'updatedAt': updatedAt,
