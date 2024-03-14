@@ -45,7 +45,7 @@ class AuthService {
     var data = jsonDecode(response.body)['data'];
     UserModel user = UserModel.fromJson(data);
     user.token = 'Bearer' + jsonDecode(response.body)['token'];
-
+    user.poin = 100;
     // Save the user data to SharedPreferences
     await _prefsManager.saveUser(user);
   }
@@ -97,5 +97,45 @@ class AuthService {
 
   UserModel? getCurrentUser() {
     return _prefsManager.getUser();
+  }
+
+
+  Future<UserModel> updateProfile({
+    required String? id,
+    String? username,
+    String? email,
+    String? password,
+  }) async {
+    var url = Uri.parse('$baseUrl/profile/update');
+
+    var headers = {
+      'content-type': 'application/json',
+    };
+
+    var body = json.encode({
+      'id': id,
+      'username': username,
+      'email': email,
+      'password': password,
+    });
+
+    var response = await http.put(
+      url,
+      headers: headers,
+      body: body,
+    );
+
+    print(response.body);
+    if (response.statusCode != 200) {
+      throw Exception("Gagal Update Profile");
+    }
+
+    var data = jsonDecode(response.body)['data'];
+    UserModel user = UserModel.fromJson(data);
+
+    // Save the user data to SharedPreferences
+    await _prefsManager.saveUser(user);
+
+    return user;
   }
 }

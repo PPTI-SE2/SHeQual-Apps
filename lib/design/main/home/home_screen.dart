@@ -10,7 +10,8 @@ import 'package:shequal/shared/widget/card_home.dart';
 class HomeScreen extends StatefulWidget {
   final UserPreferencesManager userPreferencesManager;
 
-  const HomeScreen({Key? key, required this.userPreferencesManager}) : super(key: key);
+  const HomeScreen({Key? key, required this.userPreferencesManager})
+      : super(key: key);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -64,29 +65,28 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             Expanded(
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.pushNamed(context, AppRoutes.search);
-                },
-                child: Container(
-                  width: double.infinity,
-                  height: 42,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 11,
+              child: Container(
+                width: double.infinity,
+                height: 42,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(18),
+                  color: const Color(0xffF7F7F7),
+                ),
+                child: TextFormField(
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: "Topik apa yang kamu cari ?",
+                      hintStyle: blackTextStyle.copyWith(
+                    fontSize: 13,
+                    color: const Color(0xff979799),
                   ),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(18),
-                    color: const Color(0xffF7F7F7),
-                  ),
-                  child: Text(
-                    "Topik apa yang kamu cari ?",
-                    style: blackTextStyle.copyWith(
-                      fontSize: 13,
-                      color: const Color(0xff979799),
                     ),
                   ),
-                ),
+                
               ),
             ),
           ],
@@ -110,7 +110,7 @@ class _HomeScreenState extends State<HomeScreen> {
           return RefreshIndicator(
             onRefresh: () async {
               setState(() {
-                 refreshPosts();
+                refreshPosts();
               });
             },
             child: SingleChildScrollView(

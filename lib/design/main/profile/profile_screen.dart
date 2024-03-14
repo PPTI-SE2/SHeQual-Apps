@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shequal/models/user_model.dart';
+import 'package:shequal/providers/appoiment_providers.dart';
 import 'package:shequal/providers/auth_providers.dart';
 import 'package:shequal/providers/page_providers.dart';
 import 'package:shequal/routes/app_routes.dart';
@@ -107,6 +108,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   onTap: () {
                     authProviders.logout();
                     Provider.of<PageProviders>(context, listen: false).setIndex(0);
+                    Provider.of<AppoimentProviders>(context, listen: false).appoiments = [];
                     Navigator.pushNamedAndRemoveUntil(context, AppRoutes.root, (route) => false);
                   },
                   child: Container(

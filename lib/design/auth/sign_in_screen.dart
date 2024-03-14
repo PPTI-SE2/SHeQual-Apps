@@ -72,6 +72,7 @@ class _SignInPageState extends State<SignInPage> {
           title: 'Email',
           hintText: 'Alamat email anda',
           controller: emailController,
+          isEmail: true,
         );
       }
 

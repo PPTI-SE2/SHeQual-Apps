@@ -98,6 +98,17 @@ class _DetailConsultantState extends State<DetailRequest> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  Text("Kontak Dokter", style: blackTextStyle),
+                  Text("081222822833", style: blackTextStyle.copyWith(
+                    fontWeight: semiBold,
+                    fontSize: 12,
+                  ),),
+                ],
+              ),
+              const SizedBox(height: 5,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
                   Text("Waktu Diterima", style: blackTextStyle),
                   Text("23/02/2024 14.33", style: blackTextStyle.copyWith(
                     fontWeight: semiBold,
@@ -202,7 +213,7 @@ class _DetailConsultantState extends State<DetailRequest> {
                       child: Text(
                         (widget.appoimentModel.status! == "pending") ?
                         "Menunggu Konfirmasi" : (widget.appoimentModel.status == "accept") ?
-                        "Permintaan Konsultasi\nDiterima" : "Appoiment berhasil dibayar",
+                        "Permintaan Konsultasi\nDiterima" : (widget.appoimentModel.status == "cancelled") ? "Permintaan Konsultasi\nDibatalkan" : "Appoiment berhasil dibayar",
                         style: blackTextStyle.copyWith(
                           fontSize: 20,
                           fontWeight: medium,

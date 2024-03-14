@@ -103,6 +103,7 @@ class _SignUpPageState extends State<SignUpPage> {
           title: 'Email',
           hintText: 'Alamat email anda',
           controller: emailController,
+          isEmail: true,
         );
       }
 

@@ -193,7 +193,7 @@ class _DetailConsultantState extends State<DetailConsultant> {
                         bool isSucess = await Provider.of<AppoimentProviders>(context, listen: false)
                             .makeAppoiment(
                                 userId: widget.userPreferencesManager.getUser()!.id.toString(),
-                                consultantId: widget.consultantModel.id.toString(),
+                                consultantId: widget.consultantModel.usersId.toString(),
                                 date: widget.date,
                                 time: widget.time,
                             );

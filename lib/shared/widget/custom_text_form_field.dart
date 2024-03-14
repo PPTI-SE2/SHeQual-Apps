@@ -6,6 +6,7 @@ class CustomTextFormField extends StatefulWidget {
   final String hintText;
   final bool obscureText;
   final TextEditingController controller;
+  final bool isEmail;
 
   const CustomTextFormField({
     Key? key,
@@ -13,6 +14,7 @@ class CustomTextFormField extends StatefulWidget {
     required this.hintText,
     this.obscureText = false,
     required this.controller,
+    this.isEmail = false,
   }) : super(key: key);
 
   @override
@@ -21,11 +23,24 @@ class CustomTextFormField extends StatefulWidget {
 
 class _CustomTextFormFieldState extends State<CustomTextFormField> {
   late bool _obscureText;
+  late String? _errorText;
 
   @override
   void initState() {
     super.initState();
     _obscureText = widget.obscureText;
+    _errorText = null;
+  }
+
+  String? _validateEmail(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter an email';
+    }
+    final emailRegex = RegExp(r"^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$");
+    if (!emailRegex.hasMatch(value)) {
+      return 'Please enter a valid email';
+    }
+    return null;
   }
 
   @override
@@ -47,9 +62,13 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
                 controller: widget.controller,
                 decoration: InputDecoration(
                   hintText: widget.hintText,
+                  errorText: _errorText,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(
                       defaultRadius,
+                    ),
+                    borderSide: BorderSide(
+                      color: _errorText != null ? Colors.red : kBlackColor,
                     ),
                   ),
                   focusedBorder: OutlineInputBorder(
@@ -57,10 +76,18 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
                       defaultRadius,
                     ),
                     borderSide: BorderSide(
-                      color: kPrimaryColor,
+                      color: _errorText != null ? Colors.red : kPrimaryColor,
                     ),
                   ),
                 ),
+                validator: widget.isEmail ? _validateEmail : null,
+                onChanged: (value) {
+                  setState(() {
+                    if (widget.isEmail) {
+                      _errorText = _validateEmail(value);
+                    }
+                  });
+                },
               ),
               if (widget.obscureText)
                 Transform.translate(

@@ -21,77 +21,7 @@ class DetailArticleScreen extends StatelessWidget {
     }
 
     Widget containerKotak() {
-      return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-        margin: const EdgeInsets.only(top: 10),
-        width: double.infinity,
-        decoration: BoxDecoration(
-          color: kWhiteColor,
-          borderRadius: const BorderRadius.all(
-            Radius.circular(10),
-          ),
-        ),
-        child: Column(
-          children: [
-            Text(
-              articleModel.title.toString(),
-              style: blackTextStyle.copyWith(fontSize: 25, fontWeight: bold),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 15),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  convertDate(),
-                  style: purpleTextStyle.copyWith(
-                      fontWeight: medium,
-                      fontSize: 18,
-                      color: const Color.fromARGB(255, 49, 50, 57)),
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                Text(
-                  articleModel.publisher.toString(),
-                  style: purpleTextStyle.copyWith(
-                    fontSize: 18,
-                    fontWeight: semiBold,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                )
-              ],
-            )
-          ],
-        ),
-      );
-    }
-
-    Widget navBarAtas() {
-      return Row(
-        children: [
-          GestureDetector(
-            onTap: () {
-              Navigator.pop(context);
-            },
-            child: const Icon(
-              Icons.arrow_back_ios,
-              size: 24,
-            ),
-          ),
-          const SizedBox(width: 10),
-          Text(
-            'Detail Artikel',
-            style: blackTextStyle.copyWith(
-              fontSize: 24,
-              fontWeight: medium,
-            ),
-          ),
-        ],
-      );
-    }
-
-    Widget gambarArtikel() {
+      Widget gambarArtikel() {
       return Container(
         width: 358,
         height: 212,
@@ -106,7 +36,9 @@ class DetailArticleScreen extends StatelessWidget {
                 spreadRadius: 0,
                 color: Colors.black.withOpacity(0.25),
               )
-            ]),
+            ],
+            borderRadius: BorderRadius.circular(15),
+            ),
       );
     }
 
@@ -154,6 +86,81 @@ class DetailArticleScreen extends StatelessWidget {
         width: double.infinity,
       );
     }
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+        margin: const EdgeInsets.only(top: 10),
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: kWhiteColor,
+          borderRadius: const BorderRadius.all(
+            Radius.circular(10),
+          ),
+        ),
+        child: Column(
+          children: [
+            Text(
+              articleModel.title.toString(),
+              style: blackTextStyle.copyWith(fontSize: 25, fontWeight: bold),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 15),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  convertDate(),
+                  style: purpleTextStyle.copyWith(
+                      fontWeight: medium,
+                      fontSize: 18,
+                      color: const Color.fromARGB(255, 49, 50, 57)),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  articleModel.publisher.toString(),
+                  style: purpleTextStyle.copyWith(
+                    fontSize: 18,
+                    fontWeight: semiBold,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                )
+              ],
+            ),
+              const SizedBox(height: 20,),
+            gambarArtikel(),
+                teksArtikel(),
+                button(),
+          ],
+        ),
+      );
+    }
+
+    Widget navBarAtas() {
+      return Row(
+        children: [
+          GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: const Icon(
+              Icons.arrow_back_ios,
+              size: 24,
+            ),
+          ),
+          const SizedBox(width: 10),
+          Text(
+            'Detail Artikel',
+            style: blackTextStyle.copyWith(
+              fontSize: 24,
+              fontWeight: medium,
+            ),
+          ),
+        ],
+      );
+    }
+
+    
 
     return Scaffold(
       backgroundColor: kBackgroundColor,
@@ -165,9 +172,6 @@ class DetailArticleScreen extends StatelessWidget {
               children: [
                 navBarAtas(),
                 containerKotak(),
-                gambarArtikel(),
-                teksArtikel(),
-                button(),
               ],
             ),
           ),

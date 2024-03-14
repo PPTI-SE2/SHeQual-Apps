@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shequal/models/user_model.dart';
+import 'package:shequal/services/auth_service.dart';
 import 'package:shequal/shared/theme.dart';
 import 'package:shequal/shared/user_preference_manager.dart';
 import 'package:shequal/shared/widget/custom_button.dart';
@@ -140,6 +141,18 @@ class EditProfileScreen extends StatelessWidget {
           text: 'Simpan',
           margin: const EdgeInsets.only(top: 30),
           onPressed: () {
+            if (namaPenggunaController.text.isNotEmpty) {
+              AuthService().updateProfile(username: namaPenggunaController.text, id: _userModel?.id);
+            }
+            
+            if (emailController.text.isNotEmpty) {
+              AuthService().updateProfile(email: emailController.text, id: _userModel?.id);
+            }
+
+            if(passwordController.text.isNotEmpty) {
+              AuthService().updateProfile(password: passwordController.text, id: _userModel?.id);
+            }
+
             Navigator.pop(context);
           },
         );

@@ -151,7 +151,7 @@ class _PilihPembayaranState extends State<PilihPembayaran> {
                     user!.poin = (user.poin! - 100);
                     widget.userPreferencesManager.saveUser(user);
                     
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => SuccessConsultation()));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => SuccessConsultation(isRequest: false,)));
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                       backgroundColor: kRedColor,
