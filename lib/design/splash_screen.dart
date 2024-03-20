@@ -49,11 +49,15 @@ class _SplashScreenState extends State<SplashScreen> {
             backgroundColor: kWhiteColor,
             body: Center(
               child: Container(
-                width: 50,
-                height: 50,
+                width: 200,
+                height: 200,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: kBlackColor,
+                  image: const DecorationImage(
+                    image: AssetImage("assets/logo.png"),
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ),

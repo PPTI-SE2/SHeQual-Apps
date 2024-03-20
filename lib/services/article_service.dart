@@ -2,12 +2,11 @@ import 'dart:convert';
 
 import 'package:shequal/models/article_model.dart';
 import 'package:http/http.dart' as http;
+import 'package:shequal/shared/server-config.dart';
 
 class ArticleService {
-  String baseUrl = "http://192.168.130.163:8000/api";
-
   Future<List<ArticleModel>> getArticle() async {
-    var url = Uri.parse("$baseUrl/articles");
+    var url = Uri.parse("$baseUrl/api/articles");
 
     var headers = {
       'content-type': 'application/json',
@@ -38,7 +37,7 @@ class ArticleService {
     required String userId,
     required String poin,
   }) async {
-    var url = Uri.parse("$baseUrl/putPoint");
+    var url = Uri.parse("$baseUrl/api/putPoint");
 
     var headers = {
       'content-type': 'application/json',

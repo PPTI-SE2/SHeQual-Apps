@@ -3,12 +3,11 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:shequal/models/comment_model.dart';
 import 'package:shequal/models/post_model.dart';
+import 'package:shequal/shared/server-config.dart';
 
 class PostService {
-  String baseUrl = "http://192.168.130.163:8000/api";
-
   Future<List<PostModel>> getPost() async {
-    var url = Uri.parse("$baseUrl/posts");
+    var url = Uri.parse("$baseUrl/api/posts");
 
     var headers = {
       'content-type': 'application/json',
@@ -39,7 +38,7 @@ class PostService {
     required String? idPost,
     required String? idUser,
   }) async {
-    var url = Uri.parse("$baseUrl/like-unlike-post");
+    var url = Uri.parse("$baseUrl/api/like-unlike-post");
 
     var headers = {
       'content-type': 'application/json',
@@ -73,7 +72,7 @@ class PostService {
     required String? postsId,
     required String? usersId,
   }) async {
-    var url = Uri.parse("$baseUrl/check-like/$postsId/$usersId");
+    var url = Uri.parse("$baseUrl/api/check-like/$postsId/$usersId");
 
     var headers = {
       'content-type': 'application/json',
@@ -98,7 +97,7 @@ class PostService {
     required String title,
     required String content,
   }) async {
-    var url = Uri.parse("$baseUrl/posts");
+    var url = Uri.parse("$baseUrl/api/posts");
 
     var headers = {
       'content-type': 'application/json',
@@ -134,7 +133,7 @@ class PostService {
     required String userId,
     required String details,
   }) async {
-    var url = Uri.parse("$baseUrl/comments");
+    var url = Uri.parse("$baseUrl/api/comments");
 
     var headers = {
       'content-type': 'application/json',

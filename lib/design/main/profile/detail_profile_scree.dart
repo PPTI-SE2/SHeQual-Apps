@@ -1,25 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shequal/models/user_model.dart';
-import 'package:shequal/providers/appoiment_providers.dart';
 import 'package:shequal/providers/auth_providers.dart';
-import 'package:shequal/providers/page_providers.dart';
 import 'package:shequal/routes/app_routes.dart';
 import 'package:shequal/shared/theme.dart';
 import 'package:shequal/shared/user_preference_manager.dart';
 import 'package:intl/intl.dart';
 
-class ProfileScreen extends StatefulWidget {
+class DetailProfileScreen extends StatefulWidget {
   final UserPreferencesManager userPreferencesManager;
-  const ProfileScreen({super.key, required this.userPreferencesManager});
+  const DetailProfileScreen({super.key, required this.userPreferencesManager});
 
   @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
+  State<DetailProfileScreen> createState() => _DetailProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
-  late UserModel _userModel = UserModel(
-    // Initialize _userModel here
+class _DetailProfileScreenState extends State<DetailProfileScreen> {
+  late UserModel _userModel = UserModel(  // Initialize _userModel here
     id: '',
     username: '',
     age: null,
@@ -49,22 +46,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     String convertDate() {
-      String? timestamp = _userModel.createdAt;
-
-      if (timestamp == null) {
-        return ''; // or any default value you prefer
-      }
-
-      DateTime? dateTime = DateTime.tryParse(timestamp);
-
-      if (dateTime == null) {
-        return ''; // or any default value you prefer
-      }
+      String timestamp = _userModel.createdAt.toString();
+      DateTime dateTime = DateTime.parse(timestamp);
       String formattedDate = DateFormat('dd MMM yyyy').format(dateTime);
       return formattedDate; // Output: 16 Mei 2024
     }
-
     AuthProviders authProviders = Provider.of<AuthProviders>(context);
+
 
     Widget banner() {
       return Container(
@@ -84,62 +72,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // GestureDetector(
-                //   onTap: () {
-                //     Navigator.pop(context);
-                //   },
-                //   child: const Icon(
-                //     Icons.arrow_back,
-                //     size: 30,
-                //   ),
-                // ),
                 GestureDetector(
                   onTap: () {
                     Navigator.pushNamed(context, AppRoutes.editProfile);
                   },
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 15,
-                      vertical: 6,
-                    ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(18),
-                      color: kWhiteColor.withOpacity(0.7),
-                    ),
-                    child: Text(
-                      "Edit Profile",
-                      style: blackTextStyle.copyWith(
-                        fontWeight: semiBold,
-                      ),
-                    ),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    authProviders.logout();
-                    Provider.of<PageProviders>(context, listen: false)
-                        .setIndex(0);
-                    Provider.of<AppoimentProviders>(context, listen: false)
-                        .appoiments = [];
-                    Navigator.pushNamedAndRemoveUntil(
-                        context, AppRoutes.root, (route) => false);
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 15,
-                      vertical: 6,
-                    ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(18),
-                      color: kRedColor,
-                    ),
-                    child: Text(
-                      "Logout",
-                      style: whiteTextStyle.copyWith(
-                        fontWeight: semiBold,
-                      ),
-                    ),
-                  ),
+                  child: Icon(Icons.arrow_back, size: 30, color: kBlackColor,)
                 ),
               ],
             ),

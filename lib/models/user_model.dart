@@ -23,15 +23,21 @@ class UserModel {
   });
 
   UserModel.fromJson(Map<String, dynamic> json) {
-    id = json["id"].toString();
-    username = json['username'];
-    age = json['age'];
-    email = json['email'];
-    imgProfile = json['img_profile'];
-    poin = json['poin'];
-    createdAt = json["created_at"].toString();
-    updatedAt = json["updated_at"].toString();
-    token = json['token'];
+    try {
+      id = json["id"].toString();
+      username = json['username'].toString();
+      age = int.parse(json["age"].toString());
+      email = json['email'].toString();
+      imgProfile = json['img_profile'].toString();
+      poin = int.parse(json['poin'].toString());
+      createdAt = json["created_at"].toString();
+      updatedAt = json["updated_at"].toString();
+      token = json['token'].toString();
+    } catch (e, stackTrace) {
+      print('Error parsing JSON in UserModel.fromJson: $e\n$stackTrace');
+      // Optionally, you can re-throw the exception to handle it elsewhere
+      // rethrow;
+    }
   }
 
   Map<String, dynamic> toJson() {

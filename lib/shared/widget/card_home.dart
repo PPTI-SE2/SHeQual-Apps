@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:shequal/design/main/home/detail_post_screen.dart';
 import 'package:shequal/models/post_model.dart';
 import 'package:shequal/providers/post_providers.dart';
+import 'package:shequal/shared/server-config.dart';
 import 'package:shequal/shared/theme.dart';
 import 'package:intl/intl.dart';
 import 'package:shequal/shared/user_preference_manager.dart';
@@ -28,19 +29,24 @@ class CardHome extends StatelessWidget {
         children: [
           Row(
             children: [
-              Container(
-                width: 46,
-                height: 46,
-                margin: const EdgeInsets.only(right: 10),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(
-                    width: 2,
-                    color: const Color(0xffDBD7EC),
-                  ),
-                  image: DecorationImage(
-                    image: NetworkImage(postModel.imgProfile.toString()),
-                    fit: BoxFit.cover,
+              GestureDetector(
+                onTap: () {
+                  // Navigator.push(context, MaterialPageRoute(builder: (context) => DetailProfileScreen(userPreferencesManager: userPreferencesManager)));
+                },
+                child: Container(
+                  width: 46,
+                  height: 46,
+                  margin: const EdgeInsets.only(right: 10),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      width: 2,
+                      color: const Color(0xffDBD7EC),
+                    ),
+                    image: DecorationImage(
+                      image: NetworkImage(postModel.imgProfile.toString()),
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
               ),
@@ -100,7 +106,7 @@ class CardHome extends StatelessWidget {
             color: kGreyColor,
             borderRadius: BorderRadius.circular(18),
             image: DecorationImage(
-              image: NetworkImage("http://192.168.130.163:8000/uploads/${postModel.imgPost}"),
+              image: NetworkImage("$baseUrl/uploads/${postModel.imgPost}"),
               fit: BoxFit.cover,
             ),
           ),

@@ -68,8 +68,9 @@ class AuthProviders with ChangeNotifier {
       }
 
       return true;
-    } catch (e) {
+    } catch (e, stackTrace) {
       print(e.toString());
+      print(stackTrace.toString());
 
       return false;
     }

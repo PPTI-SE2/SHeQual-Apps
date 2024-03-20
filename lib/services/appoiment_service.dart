@@ -3,14 +3,13 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shequal/models/appoiment_model.dart';
 import 'package:shequal/models/consultant_model.dart';
+import 'package:shequal/shared/server-config.dart';
 
 class AppoimentService {
-  String baseUrl = "http://192.168.130.163:8000/api";
-
   Future<List<AppoimentModel?>?> getAppoimentByUserId({
     required String userId,
   }) async {
-    var url = Uri.parse("$baseUrl/userAppointment?users_id=$userId");
+    var url = Uri.parse("$baseUrl/api/userAppointment?users_id=$userId");
 
     var response = await http.get(url);
 
@@ -35,7 +34,7 @@ class AppoimentService {
     required String date,
     required String time,
   }) async {
-    var url = Uri.parse("$baseUrl/consulForm");
+    var url = Uri.parse("$baseUrl/api/consulForm");
 
     var headers = {
       'content-type': 'application/json',
@@ -66,7 +65,7 @@ class AppoimentService {
   Future<bool> payAppoiment({
     required String appointmentId,
   }) async {
-    var url = Uri.parse("$baseUrl/payment?appointment_id=$appointmentId");
+    var url = Uri.parse("$baseUrl/api/payment?appointment_id=$appointmentId");
 
     var headers = {
       'content-type': 'application/json',
@@ -90,7 +89,7 @@ class AppoimentService {
   Future<bool> cancelAppoiment({
     required String appointmentId,
   }) async {
-    var url = Uri.parse("$baseUrl/cancellAppointment?appointment_id=$appointmentId");
+    var url = Uri.parse("$baseUrl/api/cancellAppointment?appointment_id=$appointmentId");
 
     var headers = {
       'content-type': 'application/json',
@@ -113,7 +112,7 @@ class AppoimentService {
   Future<bool> isBayar({
     required String appointmentId,
   }) async {
-    var url = Uri.parse("$baseUrl/isBayar?appointment_id=$appointmentId");
+    var url = Uri.parse("$baseUrl/api/isBayar?appointment_id=$appointmentId");
 
     var response = await http.get(url);
 
@@ -131,7 +130,7 @@ class AppoimentService {
     required String date,
     required String time,
   }) async {
-    var url = Uri.parse("$baseUrl/getConsultant");
+    var url = Uri.parse("$baseUrl/api/getConsultant");
 
     var headers = {
       'content-type': 'application/json',

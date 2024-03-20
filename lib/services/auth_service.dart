@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shequal/models/user_model.dart';
+import 'package:shequal/shared/server-config.dart';
 import 'package:shequal/shared/user_preference_manager.dart';
 
 class AuthService {
-  String baseUrl = "http://192.168.130.163:8000/api";
   final UserPreferencesManager _prefsManager = UserPreferencesManager();
 
   Future<void> register({
@@ -15,7 +15,7 @@ class AuthService {
     required String password,
     required String confirmPassword,
   }) async {
-    var url = Uri.parse('$baseUrl/register');
+    var url = Uri.parse('$baseUrl/api/register');
 
     var headers = {
       'content-type': 'application/json',
@@ -37,7 +37,6 @@ class AuthService {
     );
 
     print(response.body);
-
     if (response.statusCode != 200) {
       throw Exception("Gagal Register");
     }
@@ -54,7 +53,7 @@ class AuthService {
     required String email,
     required String password,
   }) async {
-    var url = Uri.parse('$baseUrl/login');
+    var url = Uri.parse('$baseUrl/api/login');
 
     var headers = {
       'content-type': 'application/json',
@@ -106,7 +105,7 @@ class AuthService {
     String? email,
     String? password,
   }) async {
-    var url = Uri.parse('$baseUrl/profile/update');
+    var url = Uri.parse('$baseUrl/api/profile/update');
 
     var headers = {
       'content-type': 'application/json',

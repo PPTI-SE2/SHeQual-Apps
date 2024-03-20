@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:shequal/models/comment_model.dart';
 import 'package:shequal/models/post_model.dart';
 import 'package:shequal/providers/post_providers.dart';
+import 'package:shequal/shared/server-config.dart';
 import 'package:shequal/shared/theme.dart';
 import 'package:shequal/shared/user_preference_manager.dart';
 
@@ -65,7 +66,7 @@ class _DetailPostScreenState extends State<DetailPostScreen> {
         decoration: BoxDecoration(
           color: kGreyColor,
           image: DecorationImage(
-            image: NetworkImage("http://192.168.130.163:8000/uploads/${widget.postModel!.imgPost}"),
+            image: NetworkImage("$baseUrl/uploads/${widget.postModel!.imgPost}"),
             fit: BoxFit.cover,
           ),
         ),

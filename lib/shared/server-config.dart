@@ -1,0 +1,1 @@
+String baseUrl = "https://shequal-api.my.id";
